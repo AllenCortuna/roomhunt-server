@@ -1,5 +1,5 @@
-import Accomodation from "../models/Accomodation.js";
-import mongoose from "mongoose";
+import Accomodation from "../models/accommodation.js";
+// import mongoose from "mongoose";
 
 export const getAccomodations = async (req, res) => {
   try {

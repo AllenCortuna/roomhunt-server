@@ -1,20 +1,20 @@
 
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import expenseRoutes from './routes/expense.js';
-import locationRoutes from './routes/location.js';
-import userRoutes from './routes/user.js';
+import accommodatorRoutes from './routes/accommodator.js'
+import accommodationRoutes from './routes/accommodation.js'
 const app = express();
 dotenv.config();
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 app.use(cors());
-app.use('/user',userRoutes)
-app.use('/location', locationRoutes);
+app.use('/accommodation', accommodationRoutes);
+app.use('/accommodator', accommodatorRoutes);
 
 app.get('/',(req,res) => {res.send('Hello to Room hunt API');});
 
