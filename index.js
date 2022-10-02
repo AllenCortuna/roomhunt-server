@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import accommodatorRoutes from './routes/accommodator.js'
+import roomRoutes from './routes/room.js'
 const app = express();
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 app.use(cors());
 // app.use('/accommodation', accommodationRoutes);
 app.use('/accommodator', accommodatorRoutes);
+app.use('/rooms',roomRoutes)
 
 app.get('/',(req,res) => {res.send('Hello to Room hunt API');});
 

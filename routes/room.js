@@ -7,7 +7,7 @@ import {
   getRoom,
   updateRoom,
   deleteRoom,
-} from "../controllers/rooms.js";
+} from "../controllers/room.js";
 
 // import auth from "../middleware/auth.js";
 const router = express.Router();
