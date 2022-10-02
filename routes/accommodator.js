@@ -2,10 +2,11 @@ import express from 'express';
 const router = express.Router();
 
 
-import {getAccommodators, signin , signup} from '../controllers/accommodator.js';
+import {getAccommodators, getAccommodator, signin , signup} from '../controllers/accommodator.js';
 
 
 router.get('/', getAccommodators);
+router.get('/', getAccommodator);
 router.post('/signin', signin);
 router.post('/signup', signup);
 

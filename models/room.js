@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
 
 const expendSchema = mongoose.Schema({
-  name: String,
-  price: Number,
-  details: String,
+  name: {type:String, default:"None"},
+  price: { type: String, required: true },
+  description: String,
+  availableDate: [String],
+  image: [String],
+  tags: [String],
   updatedAt: {
     type: Date,
     default: new Date(),
