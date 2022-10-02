@@ -7,15 +7,15 @@ const secret = 'test';
 
 
 
-// export const getAccommodators = async (req, res) => { 
-//     try {
-//         const userModal = await AccommodatorModal.find()
-//         console.log('getuser ok');
-//         res.status(200).json(userModal);
-//     } catch (error) {
-//         res.status(404).json({ message: error.message });
-//     }
-// }
+export const getAccommodators = async (req, res) => { 
+    try {
+        const userModal = await AccommodatorModal.find()
+        console.log('getuser ok');
+        res.status(200).json(userModal);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
 
 
 

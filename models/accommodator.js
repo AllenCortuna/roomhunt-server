@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const accommodatorSchema = mongoose.Schema({
     email: { type: String, required: true },
+    name: { type: String, required: true },
     password: { type: String, required: true },
     id: { type: String },
 });

@@ -1,7 +1,7 @@
 import Accomodation from "../models/accommodation.js";
 // import mongoose from "mongoose";
 
-export const getAccomodations = async (req, res) => {
+export const getAccommodations = async (req, res) => {
   try {
     const accomodation = await Accomodation.find();
     res.status("200").json(accomodation);
@@ -10,7 +10,7 @@ export const getAccomodations = async (req, res) => {
   }
 };
 
-export const getAccomodation = async (req, res) => {
+export const getAccommodation = async (req, res) => {
   try {
     const { id } = req.params;
     const accomodation = await Accomodation.findOne(id);
@@ -20,7 +20,7 @@ export const getAccomodation = async (req, res) => {
   }
 };
 
-export const getOwnAccomodation = async (req, res) => {
+export const getOwnAccommodation = async (req, res) => {
   try {
     const { id } = req.params;
     const accomodation = await Accomodation.find({ _id: id });

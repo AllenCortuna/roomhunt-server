@@ -1,14 +1,14 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-import UserModal from '../models/user.js';
+import ClientModal from '../models/client.js';
 const secret = 'test';
 
 
 
-export const getUsers = async (req, res) => { 
+export const getClients = async (req, res) => { 
     try {
-        const userModal = await UserModal.find()
+        const userModal = await ClientModal.find()
         console.log('getuser ok');
         res.status(200).json(userModal);
     } catch (error) {
@@ -22,16 +22,16 @@ export const signin = async (req, res ) => {
     const { email, password } = req.body;
 
     try {
-        const oldUser = await UserModal.findOne({email});
-        if (!oldUser) return res.status(404).json({message: 'User does not exist '});
+        const oldClient = await ClientModal.findOne({email});
+        if (!oldClient) return res.status(404).json({message: 'Client does not exist '});
 
-        const isPasswordCorrect = await bcrypt.compare(password ,oldUser.password);
+        const isPasswordCorrect = await bcrypt.compare(password ,oldClient.password);
 
         if (!isPasswordCorrect) return res.status(404).json({message: 'Invalid password'});
  
-        const token = jwt.sign({email: oldUser.email, id: oldUser._id},secret,{expiresIn: '1w'});
+        const token = jwt.sign({email: oldClient.email, id: oldClient._id},secret,{expiresIn: '1w'});
         console.log("login ok");
-        res.status(200).json({result: oldUser,token});
+        res.status(200).json({result: oldClient,token});
     } catch (err) {
         res.status(500).json({message: 'Something went wrong '});
     }
@@ -42,11 +42,11 @@ export const signup = async (req, res) => {
     const { email,password} = req.body;
 
     try {
-        const oldUser =  await UserModal.findOne({email});
-        if (oldUser)  return res.status(400).json({message: 'User already exist'});
+        const oldClient =  await ClientModal.findOne({email});
+        if (oldClient)  return res.status(400).json({message: 'Client already exist'});
 
         const hashedPassword = await bcrypt.hash(password, 12);
-        const result = await UserModal.create({email,password: hashedPassword });
+        const result = await ClientModal.create({email,password: hashedPassword });
 
         const token = jwt.sign({email: result.email,id : result._id },secret, {expiresIn: '1w'})
         res.status(201).json({result,token});

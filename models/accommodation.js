@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const  accommodationSchema = mongoose.Schema({
   Name : String ,
   owner: String,
+  ownerId: String,
   location : String,
   contact: String,
   email: String,
