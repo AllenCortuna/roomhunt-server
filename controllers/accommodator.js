@@ -1,3 +1,5 @@
+
+
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -45,7 +47,10 @@ export const signup = async (req, res) => {
       email,
       password: hashedPassword,
     });
-
+      // TODO: otp
+    
+  
+    
     const token = jwt.sign({ email: result.email, id: result._id }, secret, {
       expiresIn: "1w",
     });
