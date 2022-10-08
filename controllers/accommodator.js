@@ -4,6 +4,7 @@ import { generateOTP, mailTransport } from "../tools/mail.js";
 
 import Accommodator from "../models/accommodator.js";
 import VerificationToken from "../models/verificationToken.js";
+import  isValidObjectId  from "mongoose";
 const secret = "test";
 
 export const signup = async (req, res) => {
@@ -56,7 +57,7 @@ export const signup = async (req, res) => {
       expiresIn: "1w",
     });
     res.status(201).json({ result, token });
-    console.log(OTP);
+    // console.log(OTP);
     console.log(result);
   } catch (error) {
     res.status(500).json({ message: "Something went wrong " });
@@ -64,6 +65,42 @@ export const signup = async (req, res) => {
   }
 };
 
+// VERIFIFY EMAIL
+export const verifyEmail = async (req, res) => {
+  const { otp, accommodatorId } = req.body;
+  //check if the valid params
+  if (!accommodatorId || !otp.trim())
+    return res.status(400).json({ message: "invalid Request no parameters" });
+  // check if tama yung id ng accommodator
+  if (!isValidObjectId(accommodatorId))
+    return res.status(404).json({ message: "Invalid accommodator" });
+
+  const acc = await Accommodator.findById(accommodatorId);
+  // kung meron yung account ng accommodator sa database
+  if (!acc) return res.status(404).json({ message: "Accommodator not Found" });
+  // kung verified na already
+  if (acc.verified)
+    return res.status(403).json({ message: "Account already verified" });
+  const token = await VerificationToken.findOne({ owner: acc._id });
+  if (!token)
+    return res.status(404).json({ message: "Accommodators not found" });
+  const isMatch = await token.compareToken(otp);
+  if (!isMatch) return res.status(500).json({ message: "OTP not match" });
+  acc.verfied = true;
+  await VerificationToken.findOneAndDelete(token._id);
+await acc.save()
+  mailTransport().sendEmail({
+    from: "roomhunt@email.com",
+    to: acc.email,
+    subject: "Email verified succesfully",
+    // make plainHtmlTemppate
+    body: "<h1>You can now upload and manange your Rooms</h1>"
+  })
+    res.status(200).json(acc)
+console.log("sucess verification")
+};
+
+// LOGIN
 export const signin = async (req, res) => {
   const { email, password } = req.body;
 
