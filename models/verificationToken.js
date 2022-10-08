@@ -1,6 +1,6 @@
 
 import mongoose from "mongoose";
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 
 const verificationTokenSchema = mongoose.Schema({
   owner : {
@@ -31,4 +31,4 @@ verificationTokenSchema.methods.compareToken = async function (token) {
   return result 
 }
 
-export default mongoose.model("Accommodator", verificationTokenSchema);
+export default mongoose.model("VerificationToken", verificationTokenSchema);

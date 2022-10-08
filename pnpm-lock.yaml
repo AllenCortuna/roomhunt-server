@@ -8,6 +8,7 @@ specifiers:
   express: ^4.17.3
   jsonwebtoken: ^8.5.1
   mongoose: ^6.2.6
+  nodemailer: ^6.8.0
   nodemon: ^2.0.15
   offline: ^0.0.1
 
@@ -19,6 +20,7 @@ dependencies:
   express: 4.18.1
   jsonwebtoken: 8.5.1
   mongoose: 6.3.5
+  nodemailer: 6.8.0
   nodemon: 2.0.16
   offline: 0.0.1
 
@@ -955,6 +957,11 @@ packages:
   /negotiator/0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /nodemailer/6.8.0:
+    resolution: {integrity: sha512-EjYvSmHzekz6VNkNd12aUqAco+bOkRe3Of5jVhltqKhEsjw/y0PYPJfp83+s9Wzh1dspYAkUW/YNQ350NATbSQ==}
+    engines: {node: '>=6.0.0'}
     dev: false
 
   /nodemon/2.0.16:

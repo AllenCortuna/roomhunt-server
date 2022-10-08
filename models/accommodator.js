@@ -8,7 +8,6 @@ const accommodatorSchema = mongoose.Schema({
   owner: { type: String, required: true },
   location: { type: String, required: true },
   contact: { type: String, required: true },
-  email: { type: String, required: true },
   category: { type: String, required: true },
   review: [Number],
   fetured: Boolean,
