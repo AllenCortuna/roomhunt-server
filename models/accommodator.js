@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// TODO: image, valid id at business permit ay required  
+// TODO: image, valid id at business permit ay required
 const accommodatorSchema = mongoose.Schema({
   // id: { type: String },
   email: { type: String, required: true },
@@ -12,7 +12,7 @@ const accommodatorSchema = mongoose.Schema({
   category: { type: String, required: true },
   review: [Number],
   fetured: Boolean,
-  verfied: {type: Boolean, default: false},
+  verfied: { type: Boolean, default: false, required: true },
   image: String,
   validID: String,
   businessPermit: String,

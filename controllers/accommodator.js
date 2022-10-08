@@ -4,7 +4,7 @@ import { generateOTP, mailTransport } from "../tools/mail.js";
 
 import Accommodator from "../models/accommodator.js";
 import VerificationToken from "../models/verificationToken.js";
-import  isValidObjectId  from "mongoose";
+import isValidObjectId from "mongoose";
 const secret = "test";
 
 export const signup = async (req, res) => {
@@ -70,7 +70,7 @@ export const verifyEmail = async (req, res) => {
   const { otp, accommodatorId } = req.body;
   //check if the valid params
   if (!accommodatorId || !otp.trim())
-    return res.status(400).json({ message: "invalid Request no parameters" });
+    return res.status(400).json({ message: "Invalid Request no parameters" });
   // check if tama yung id ng accommodator
   if (!isValidObjectId(accommodatorId))
     return res.status(404).json({ message: "Invalid accommodator" });
@@ -82,22 +82,23 @@ export const verifyEmail = async (req, res) => {
   if (acc.verified)
     return res.status(403).json({ message: "Account already verified" });
   const token = await VerificationToken.findOne({ owner: acc._id });
+  console.log(token)
   if (!token)
     return res.status(404).json({ message: "Accommodators not found" });
   const isMatch = await token.compareToken(otp);
   if (!isMatch) return res.status(500).json({ message: "OTP not match" });
   acc.verfied = true;
   await VerificationToken.findOneAndDelete(token._id);
-await acc.save()
+  await acc.save();
   mailTransport().sendEmail({
     from: "roomhunt@email.com",
     to: acc.email,
     subject: "Email verified succesfully",
     // make plainHtmlTemppate
-    body: "<h1>You can now upload and manange your Rooms</h1>"
-  })
-    res.status(200).json(acc)
-console.log("sucess verification")
+    body: "<h1>You can now upload and manange your Rooms</h1>",
+  });
+  res.status(201).json({ message: "Account verified!", acc });
+  console.log("sucess verification");
 };
 
 // LOGIN
