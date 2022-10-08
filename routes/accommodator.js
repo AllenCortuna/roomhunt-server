@@ -9,6 +9,6 @@ import { signin , signup, verifyEmail} from '../controllers/accommodator.js';
 // router.get('/', getAccommodator);
 router.post('/signin', signin);
 router.post('/signup', signup);
-router.put('/verify-email', verifyEmail);
+router.post('/verify-email', verifyEmail);
 
 export default router;

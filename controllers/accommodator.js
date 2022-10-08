@@ -1,10 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { generateOTP, mailTransport } from "../tools/mail.js";
-
+import mongoose from "mongoose";
 import Accommodator from "../models/accommodator.js";
 import VerificationToken from "../models/verificationToken.js";
-import isValidObjectId from "mongoose";
 const secret = "test";
 
 export const signup = async (req, res) => {
@@ -72,7 +71,7 @@ export const verifyEmail = async (req, res) => {
   if (!accommodatorId || !otp.trim())
     return res.status(400).json({ message: "Invalid Request no parameters" });
   // check if tama yung id ng accommodator
-  if (!isValidObjectId(accommodatorId))
+  if (!mongoose.isValidObjectId(accommodatorId))
     return res.status(404).json({ message: "Invalid accommodator" });
 
   const acc = await Accommodator.findById(accommodatorId);
@@ -82,7 +81,7 @@ export const verifyEmail = async (req, res) => {
   if (acc.verified)
     return res.status(403).json({ message: "Account already verified" });
   const token = await VerificationToken.findOne({ owner: acc._id });
-  console.log(token)
+  console.log(token);
   if (!token)
     return res.status(404).json({ message: "Accommodators not found" });
   const isMatch = await token.compareToken(otp);
@@ -90,13 +89,14 @@ export const verifyEmail = async (req, res) => {
   acc.verfied = true;
   await VerificationToken.findOneAndDelete(token._id);
   await acc.save();
-  mailTransport().sendEmail({
+
+  mailTransport().sendMail({
     from: "roomhunt@email.com",
     to: acc.email,
     subject: "Email verified succesfully",
-    // make plainHtmlTemppate
-    body: "<h1>You can now upload and manange your Rooms</h1>",
+    html: "<h1>You can now upload and manange your Rooms</h1>",
   });
+
   res.status(201).json({ message: "Account verified!", acc });
   console.log("sucess verification");
 };
