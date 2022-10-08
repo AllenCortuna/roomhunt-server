@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
+// TODO: image, valid id at business permit ay required  
 const accommodatorSchema = mongoose.Schema({
-  id: { type: String },
+  // id: { type: String },
   email: { type: String, required: true },
   businessName: { type: String, required: true },
   password: { type: String, required: true },

@@ -7,7 +7,8 @@ import VerificationToken from "../models/verificationToken.js";
 const secret = "test";
 
 export const signup = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, businessName, password, owner, location, contact, category } =
+    req.body;
 
   try {
     const oldAccommodator = await Accommodator.findOne({ email });
@@ -24,12 +25,12 @@ export const signup = async (req, res) => {
       location,
       contact,
       category,
-      review,
-      fetured,
-      verfied,
-      image,
-      validID,
-      businessPermit,
+      // review,
+      // fetured,
+      // verfied,
+      // image,
+      // validID,
+      // businessPermit,
     });
 
     // generate otp
@@ -43,7 +44,7 @@ export const signup = async (req, res) => {
     const result = await newAcc.save();
 
     // send email with the otp
-    mailTransport.sendMail({
+    mailTransport().sendMail({
       from: "roomhunt@email.com",
       to: newAcc.email,
       subject: "verify your email",
@@ -55,6 +56,8 @@ export const signup = async (req, res) => {
       expiresIn: "1w",
     });
     res.status(201).json({ result, token });
+    console.log(OTP);
+    console.log(result);
   } catch (error) {
     res.status(500).json({ message: "Something went wrong " });
     console.log(error);

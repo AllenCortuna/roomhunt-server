@@ -1,3 +1,4 @@
+
 import nodemailer from 'nodemailer'
 
 export const mailTransport = () => nodemailer.createTransport({
@@ -17,3 +18,4 @@ export const generateOTP = () => {
   }
   return otp;
 };
+
