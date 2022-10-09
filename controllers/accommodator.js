@@ -3,7 +3,8 @@ import jwt from "jsonwebtoken";
 import { generateOTP, mailTransport } from "../tools/mail.js";
 import mongoose from "mongoose";
 import Accommodator from "../models/accommodator.js";
-import VerificationToken from "../models/verificationToken.js";
+import VerificationToken from "../models/verificationTokenAcc.js";
+import AccVerify from "../models/accVerify.js";
 const secret = "test";
 
 export const signup = async (req, res) => {
@@ -25,12 +26,6 @@ export const signup = async (req, res) => {
       location,
       contact,
       category,
-      // review,
-      // fetured,
-      // verfied,
-      // image,
-      // validID,
-      // businessPermit,
     });
 
     // generate otp
@@ -82,11 +77,10 @@ export const verifyEmail = async (req, res) => {
     return res.status(403).json({ message: "Account already verified" });
   const token = await VerificationToken.findOne({ owner: acc._id });
   console.log(token);
-  if (!token)
-    return res.status(404).json({ message: "Accommodators not found" });
+  if (!token) return res.status(404).json({ message: "Token not found" });
   const isMatch = await token.compareToken(otp);
   if (!isMatch) return res.status(500).json({ message: "OTP not match" });
-  acc.verfied = true;
+  acc.verfiedEmail = true;
   await VerificationToken.findOneAndDelete(token._id);
   await acc.save();
 
@@ -99,6 +93,27 @@ export const verifyEmail = async (req, res) => {
 
   res.status(201).json({ message: "Account verified!", acc });
   console.log("sucess verification");
+};
+
+// VERFIY ACCOMMODATORS INFO
+export const verifyAcc = async (req, res) => {
+  const { owner, validID, businessPermit } = req.body;
+  try {
+    const alredySubmit = await AccVerify.findOne({ owner });
+    if (!owner || !validID || !businessPermit)
+      return res.status(400).json({ message: "Invalid Requestno parameters" });
+    if (alredySubmit)
+      return res.status(403).json({ message: "already submitted" });
+    const files = new AccVerify({
+      owner,
+      validID,
+      businessPermit,
+    })
+    await files.save()
+    res.status(203).json({message:"Files submitted"})
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 // LOGIN

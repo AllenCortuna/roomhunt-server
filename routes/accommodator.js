@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 
-import { signin , signup, verifyEmail} from '../controllers/accommodator.js';
+import { signin , signup, verifyAcc, verifyEmail} from '../controllers/accommodator.js';
 
 
 // router.get('/', getAccommodators);
@@ -10,5 +10,6 @@ import { signin , signup, verifyEmail} from '../controllers/accommodator.js';
 router.post('/signin', signin);
 router.post('/signup', signup);
 router.post('/verify-email', verifyEmail);
+router.post('/verify-acc', verifyAcc);
 
 export default router;

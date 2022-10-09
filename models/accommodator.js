@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// TODO: image, valid id at business permit ay required
 const accommodatorSchema = mongoose.Schema({
   // id: { type: String },
   email: { type: String, required: true },
@@ -10,12 +9,14 @@ const accommodatorSchema = mongoose.Schema({
   location: { type: String, required: true },
   contact: { type: String, required: true },
   category: { type: String, required: true },
-  review: [Number],
+  review: [{
+    type: Number,
+    
+  }],
+  image: { type: String, required: true },
   fetured: Boolean,
   verfied: { type: Boolean, default: false, required: true },
-  image: String,
-  validID: String,
-  businessPermit: String,
+  verfiedEmail: { type: Boolean, default: false, required: true },
 });
 
 export default mongoose.model("Accommodator", accommodatorSchema);
