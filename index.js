@@ -23,13 +23,17 @@ app.get("/", (res) => {
 const PORT = process.env.PORT || 8000;
 
 mongoose
-  .connect(process.env.CONNECTION_URL, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  })
+  // .connect(process.env.CONNECTION_URL, {
+  .connect(
+    "mongodb+srv://admin:qMwWh0Kgn7kusDoH@cluster0.eiwwj.mongodb.net/?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() =>
     app.listen(PORT, () =>
-      console.log(`Server Running on Port: http://localhost:${PORT}`)
+      console.log(`Server Running on http://localhost:${PORT}`)
     )
   )
   .catch((error) => console.log(`${error} did not connect`));
