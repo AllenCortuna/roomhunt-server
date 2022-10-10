@@ -81,6 +81,7 @@ export const verifyEmail = async (req, res) => {
   const isMatch = await token.compareToken(otp);
   if (!isMatch) return res.status(500).json({ message: "OTP not match" });
   acc.verfiedEmail = true;
+  acc.expireAt = null;
   await VerificationToken.findOneAndDelete(token._id);
   await acc.save();
 
@@ -108,9 +109,9 @@ export const verifyAcc = async (req, res) => {
       owner,
       validID,
       businessPermit,
-    })
-    await files.save()
-    res.status(203).json({message:"Files submitted"})
+    });
+    await files.save();
+    res.status(203).json({ message: "Files submitted" });
   } catch (err) {
     console.log(err);
   }

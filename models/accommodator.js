@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const accommodatorSchema = mongoose.Schema({
   // id: { type: String },
+  expireAt: {type: Date, default: Date.now, expires: 300},
   email: { type: String, required: true },
   businessName: { type: String, required: true },
   password: { type: String, required: true },
