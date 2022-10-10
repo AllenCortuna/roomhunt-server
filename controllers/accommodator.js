@@ -8,8 +8,16 @@ import AccVerify from "../models/accVerify.js";
 const secret = "test";
 
 export const signup = async (req, res) => {
-  const { email, businessName, password, owner, location, contact, category } =
-    req.body;
+  const {
+    email,
+    businessName,
+    password,
+    owner,
+    location,
+    contact,
+    category,
+    image,
+  } = req.body;
 
   try {
     const oldAccommodator = await Accommodator.findOne({ email });
@@ -26,6 +34,7 @@ export const signup = async (req, res) => {
       location,
       contact,
       category,
+      image,
     });
 
     // generate otp
@@ -37,7 +46,7 @@ export const signup = async (req, res) => {
 
     await verificationToken.save();
     const result = await newAcc.save();
-
+    // TODO:
     // send email with the otp
     mailTransport().sendMail({
       from: "roomhunt@email.com",
@@ -45,14 +54,14 @@ export const signup = async (req, res) => {
       subject: "verify your email",
       html: `<h1>${OTP}</h1>`,
     });
+    // console.log("result",result,"verToken",verificationToken);
 
     // auth token
     const token = jwt.sign({ email: result.email, id: result._id }, secret, {
       expiresIn: "1w",
     });
     res.status(201).json({ result, token });
-    // console.log(OTP);
-    console.log(result);
+    console.log(OTP);
   } catch (error) {
     res.status(500).json({ message: "Something went wrong " });
     console.log(error);
@@ -62,6 +71,7 @@ export const signup = async (req, res) => {
 // VERIFIFY EMAIL
 export const verifyEmail = async (req, res) => {
   const { otp, accommodatorId } = req.body;
+  console.log("otp and id", otp,accommodatorId)
   //check if the valid params
   if (!accommodatorId || !otp.trim())
     return res.status(400).json({ message: "Invalid Request no parameters" });
@@ -76,7 +86,7 @@ export const verifyEmail = async (req, res) => {
   if (acc.verified)
     return res.status(403).json({ message: "Account already verified" });
   const token = await VerificationToken.findOne({ owner: acc._id });
-  console.log(token);
+  console.log("verify email token" ,token);
   if (!token) return res.status(404).json({ message: "Token not found" });
   const isMatch = await token.compareToken(otp);
   if (!isMatch) return res.status(500).json({ message: "OTP not match" });
