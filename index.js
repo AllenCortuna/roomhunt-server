@@ -6,8 +6,8 @@ import dotenv from "dotenv";
 import accommodatorRoutes from "./routes/accommodator.js";
 import roomRoutes from "./routes/room.js";
 const app = express();
-// dotenv.config({path: 'ENV_FILENAME'});
-dotenv.config();
+dotenv.config({path: 'ENV_FILENAME'});
+// dotenv.config();
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -23,10 +23,7 @@ app.get("/", (res) => {
 const PORT = process.env.PORT || 8000;
 
 mongoose
-  // .connect(process.env.CONNECTION_URL, {
-  .connect(
-    "mongodb+srv://admin:qMwWh0Kgn7kusDoH@cluster0.eiwwj.mongodb.net/?retryWrites=true&w=majority",
-    {
+  .connect(process.env.CONNECTION_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }
