@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import accommodatorRoutes from "./routes/accommodator.js";
 import roomRoutes from "./routes/room.js";
 const app = express();
-// dotenv.config({ path: "ENV_FILENAME" });
 dotenv.config();
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -26,7 +25,6 @@ mongoose
   .connect(process.env.CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    // useMongoClient: true,
   })
   .then(() =>
     app.listen(PORT, () =>
