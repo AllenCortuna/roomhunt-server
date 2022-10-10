@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import accommodatorRoutes from "./routes/accommodator.js";
 import roomRoutes from "./routes/room.js";
 const app = express();
+require('dotenv').config({ path: 'ENV_FILENAME' });
 dotenv.config();
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
