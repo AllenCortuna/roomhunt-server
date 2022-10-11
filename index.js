@@ -21,7 +21,7 @@ app.get("/", (res) => {
 });
 
 const PORT = process.env.PORT || 8000;
-const connection = parseConnectionUrl(process.env.CONNECTION_URL)
+const connection =  String(process.env.CONNECTION_URL)
 
 mongoose
   .connect(connection, {
