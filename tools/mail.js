@@ -15,7 +15,9 @@ export const generateOTP = () => {
     const randVal = Math.round(Math.random() * 9);
     otp = randVal + otp;
   }
-  return otp;
+  const output = otp
+  otp = ""
+  return output;
 };
 
 export const mailTransport = ({OTP, result}) => {
