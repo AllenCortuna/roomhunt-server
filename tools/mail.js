@@ -18,27 +18,53 @@ export const generateOTP = () => {
   return otp;
 };
 
-export const mailTransport = () =>
-  nodemailer.createTransport({
-    service: "gmail",
-    port: 465,
-    auth: {
-      user: "olsencortuna@gmail.com",
-      pass: "yeopsbeprvyefdvt",
-    },
-  });
+export const mailTransport = ({OTP, result}) => {
+    let mailTransporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "olsencortuna@gmail.com",
+        pass: "yeopsbeprvyefdvt",
+      },
+    });
 
-// var mailOptions = {
-//   from: 'youremail@gmail.com',
-//   to: 'myfriend@yahoo.com',
-//   subject: 'Sending Email using Node.js',
-//   text: 'That was easy!'
-// };
-//
-// mailTransport.sendMail(mailOptions, function(error, info){
-//   if (error) {
-//     console.log(error);
-//   } else {
-//     console.log('Email sent: ' + info.response);
-//   }
-// });
+    let mailDetails = {
+      from: "olsencortuna@gmail.com",
+      to: `${result.email}`,
+      subject: "OTP",
+      html: `<h1>${OTP}</h1>`,
+    };
+
+    return mailTransporter.sendMail(mailDetails, function (err, data) {
+      if (err) {
+        console.log("Error Occurs");
+      } else {
+        console.log("Email sent successfully");
+      }
+    });
+}
+
+
+export const mailVerified = (email) => {
+    let mailTransporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "olsencortuna@gmail.com",
+        pass: "yeopsbeprvyefdvt",
+      },
+    });
+
+    let mailDetails = {
+      from: "olsencortuna@gmail.com",
+      to: `${email}`,
+      subject: "OTP",
+      html: `<h1>Email Verified Successfully</h1>`,
+    };
+
+    return mailTransporter.sendMail(mailDetails, function (err, data) {
+      if (err) {
+        console.log("Error Occurs");
+      } else {
+        console.log("Email sent successfully");
+      }
+    });
+}

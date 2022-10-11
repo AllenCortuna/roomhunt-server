@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from 'nodemailer'
-import { generateOTP, mailTransport } from "../tools/mail.js";
+// import nodemailer from 'nodemailer'
+import { generateOTP, mailTransport, mailVerified } from "../tools/mail.js";
 import mongoose from "mongoose";
 import Accommodator from "../models/accommodator.js";
 import VerificationToken from "../models/verificationTokenAcc.js";
@@ -47,30 +47,8 @@ export const signup = async (req, res) => {
 
     await verificationToken.save();
     const result = await newAcc.save();
-    // WARN: remove temporary password
-    let mailTransporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "olsencortuna@gmail.com",
-        pass: "yeopsbeprvyefdvt",
-      },
-    });
 
-    let mailDetails = {
-      from: "olsencortuna@gmail.com",
-      to: `${result.email}`,
-      subject: "OTP",
-      html: `<h1>${OTP}</h1>`,
-    };
-
-    mailTransporter.sendMail(mailDetails, function (err, data) {
-      if (err) {
-        console.log("Error Occurs");
-      } else {
-        console.log("Email sent successfully");
-      }
-    });
-
+    mailTransport({OTP,result})
     // auth token
     const token = jwt.sign({ email: result.email, id: result._id }, secret, {
       expiresIn: "1w",
@@ -110,13 +88,7 @@ export const verifyEmail = async (req, res) => {
   await VerificationToken.findOneAndDelete(token._id);
   await acc.save();
 
-  mailTransport().sendMail({
-    from: "roomhunt@email.com",
-    to: `${acc.email}`,
-    subject: "Email verified succesfully",
-    text: "Email verified succesfully",
-    html: "<h1>You can now upload and manange your Rooms</h1>",
-  });
+  mailVerified(acc.email)
 
   res.status(201).json({ message: "Account verified!", acc });
   console.log("sucess verification");
