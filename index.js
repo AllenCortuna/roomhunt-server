@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import accommodatorRoutes from "./routes/accommodator.js";
 import roomRoutes from "./routes/room.js";
+import { parseConnectionUrl } from "nodemailer/lib/shared/index.js";
 const app = express();
 dotenv.config();
 
@@ -20,9 +21,10 @@ app.get("/", (res) => {
 });
 
 const PORT = process.env.PORT || 8000;
+const connection = parseConnectionUrl(process.env.CONNECTION_URL)
 
 mongoose
-  .connect(process.env.CONNECTION_URL, {
+  .connect(connection, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
