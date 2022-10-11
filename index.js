@@ -11,11 +11,11 @@ dotenv.config();
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
-// app.use('/accommodation', accommodationRoutes);
+
 app.use("/accommodator", accommodatorRoutes);
 app.use("/rooms", roomRoutes);
 
-app.get("/", (res) => {
+app.get("/", (req, res) => {
   res.send("Hello to Room hunt API");
 });
 
@@ -32,3 +32,4 @@ mongoose
     )
   )
   .catch((error) => console.log(`${error} did not connect`));
+
