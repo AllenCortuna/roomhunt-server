@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from 'nodemailer'
 import { generateOTP, mailTransport } from "../tools/mail.js";
 import mongoose from "mongoose";
 import Accommodator from "../models/accommodator.js";
@@ -47,28 +46,25 @@ export const signup = async (req, res) => {
 
     await verificationToken.save();
     const result = await newAcc.save();
-    // WARN: remove temporary password
-    let mailTransporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "olsencortuna@gmail.com",
-        pass: "yeopsbeprvyefdvt",
-      },
-    });
 
-    let mailDetails = {
+    var mailOptions = {
       from: "olsencortuna@gmail.com",
       to: `${result.email}`,
-      subject: "OTP",
+      subject: "verify your email",
+      text: "verify your email",
       html: `<h1>${OTP}</h1>`,
     };
+    console.log(mailOptions)
 
-    mailTransporter.sendMail(mailDetails, function (err, data) {
-      if (err) {
-        console.log("Error Occurs");
-      } else {
-        console.log("Email sent successfully");
-      }
+    mailTransport().sendMail({
+      mailOptions,
+      function(error, data) {
+        if (error) {
+          console.log("email not sent:",error);
+        } else {
+          console.log("Email sent: " + data.response);
+        }
+      },
     });
 
     // auth token
