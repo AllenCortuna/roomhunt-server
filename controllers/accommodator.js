@@ -53,43 +53,47 @@ export const signup = async (req, res) => {
     res.status(201).json({ result });
     console.log(OTP);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong " });
     console.log(error);
+    res.status(500).json({ message: `Something went wrong${error.message}` });
   }
 };
 
 // VERIFIFY EMAIL
 export const verifyEmail = async (req, res) => {
-  const { otp, accommodatorId } = req.body;
-  console.log("otp and id", otp, accommodatorId);
-  //check if the valid params
-  if (!accommodatorId || !otp.trim())
-    return res.status(400).json({ message: "Invalid Request no parameters" });
-  // check if tama yung id ng accommodator
-  if (!mongoose.isValidObjectId(accommodatorId))
-    return res.status(404).json({ message: "Invalid accommodator" });
+  try {
+    const { otp, accommodatorId } = req.body;
+    //check if the valid params
+    if (!accommodatorId || !otp.trim())
+      return res.status(400).json({ message: "Invalid Request no parameters" });
+    // check if tama yung id ng accommodator
+    if (!mongoose.isValidObjectId(accommodatorId))
+      return res.status(404).json({ message: "Invalid accommodator" });
 
-  const acc = await Accommodator.findById(accommodatorId);
-  // kung meron yung account ng accommodator sa database
-  if (!acc) return res.status(404).json({ message: "Accommodator not Found" });
-  // kung verified na already
-  if (acc.verified)
-    return res.status(403).json({ message: "Account already verified" });
-  const verToken = await VerificationToken.findOne({ owner: acc._id });
-  if (!verToken) return res.status(404).json({ message: "Token not found" });
-  const isMatch = await verToken.compareToken(otp);
-  if (!isMatch) return res.status(500).json({ message: "OTP not match" });
-  acc.verfiedEmail = true;
-  acc.expireAt = null;
-  await VerificationToken.findOneAndDelete(verToken._id);
-  await acc.save();
+    const acc = await Accommodator.findById(accommodatorId);
+    // kung meron yung account ng accommodator sa database
+    if (!acc)
+      return res.status(404).json({ message: "Accommodator not Found" });
+    // kung verified na already
+    if (acc.verified)
+      return res.status(403).json({ message: "Account already verified" });
+    const verToken = await VerificationToken.findOne({ owner: acc._id });
+    if (!verToken) return res.status(404).json({ message: "Token not found" });
+    const isMatch = await verToken.compareToken(otp);
+    if (!isMatch) return res.status(500).json({ message: "OTP not match" });
+    acc.verfiedEmail = true;
+    acc.expireAt = null;
+    await VerificationToken.findOneAndDelete(verToken._id);
+    await acc.save();
 
-  mailVerified(acc.email);
-  const token = jwt.sign({ email: acc.email, id: acc._id }, secret, {
-    expiresIn: "1w",
-  });
-  res.status(200).json({ result: acc, token });
-  console.log("acc:",acc)
+    mailVerified(acc.email);
+    const token = jwt.sign({ email: acc.email, id: acc._id }, secret, {
+      expiresIn: "1w",
+    });
+    res.status(200).json({ result: acc, token });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Something went wrong " });
+  }
 };
 
 // VERFIY ACCOMMODATORS INFO
@@ -110,6 +114,7 @@ export const verifyAcc = async (req, res) => {
     res.status(203).json({ message: "Files submitted" });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Something went wrong " });
   }
 };
 
