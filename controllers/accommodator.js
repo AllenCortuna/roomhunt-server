@@ -48,12 +48,9 @@ export const signup = async (req, res) => {
     await verificationToken.save();
     const result = await newAcc.save();
 
-    mailTransport({OTP,result})
+    mailTransport({ OTP, result });
     // auth token
-    const token = jwt.sign({ email: result.email, id: result._id }, secret, {
-      expiresIn: "1w",
-    });
-    res.status(201).json({ result, token });
+    res.status(201).json({ result });
     console.log(OTP);
   } catch (error) {
     res.status(500).json({ message: "Something went wrong " });
@@ -78,20 +75,21 @@ export const verifyEmail = async (req, res) => {
   // kung verified na already
   if (acc.verified)
     return res.status(403).json({ message: "Account already verified" });
-  const token = await VerificationToken.findOne({ owner: acc._id });
-  console.log("verify email token", token);
-  if (!token) return res.status(404).json({ message: "Token not found" });
-  const isMatch = await token.compareToken(otp);
+  const verToken = await VerificationToken.findOne({ owner: acc._id });
+  if (!verToken) return res.status(404).json({ message: "Token not found" });
+  const isMatch = await verToken.compareToken(otp);
   if (!isMatch) return res.status(500).json({ message: "OTP not match" });
   acc.verfiedEmail = true;
   acc.expireAt = null;
-  await VerificationToken.findOneAndDelete(token._id);
+  await VerificationToken.findOneAndDelete(verToken._id);
   await acc.save();
 
-  mailVerified(acc.email)
-
-  res.status(201).json({ message: "Account verified!", acc });
-  console.log("sucess verification");
+  mailVerified(acc.email);
+  const token = jwt.sign({ email: acc.email, id: acc._id }, secret, {
+    expiresIn: "1w",
+  });
+  res.status(200).json({ result: acc, token });
+  console.log("acc:",acc)
 };
 
 // VERFIY ACCOMMODATORS INFO
