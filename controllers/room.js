@@ -1,49 +1,67 @@
 import express from "express";
 import mongoose from "mongoose";
-import Rooms from "../models/room.js";
+import Room from "../models/room.js";
+// import Accommodator  from "../models/accommodator";
 
 const router = express.Router();
 
-
 export const getRooms = async (req, res) => {
   try {
-    const rooms = await Rooms.find();
+    const rooms = await Room.find();
     res.status(200).json(rooms);
-    console.log("getRooms ok");
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 };
 
+export const getRoomBySearch = async (req, res) => {
+  const { location, type, bed, aircon, checkInDate, checkOutDate } = req.query;
+  try {
+    const loc = new RegExp(location, "i");
+    const rooms = await Room.find({
+      $or: [{ loc }],
+      aircon: aircon,
+      type: type,
+      bed: bed,
+      $and: [
+        {
+          checkInDate: { $lte: checkInDate },
+          checkOutDate: { $gte: checkOutDate },
+        },
+      ],
+    }).exec();
+    res.status(200).json(rooms);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
 
 export const getOwnRooms = async (req, res) => {
   const { myid } = req.params;
 
   try {
-    const rooms = await Rooms.find({ creator: myid });
+    const rooms = await Room.find({ creator: myid });
     res.status(200).json(rooms);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 };
 
- 
 export const getRoom = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const room = await Rooms.findById(id);
+    const room = await Room.findById(id);
     res.status(200).json(room);
   } catch (error) {
     res.status(404).json({ message: error.message });
-
   }
 };
 
 export const createRoom = async (req, res) => {
   const room = req.body;
 
-  const newRoomPost = new Rooms({
+  const newRoomPost = new Room({
     ...room,
     creator: req.userId,
     updatedAt: new Date().toISOString(),
@@ -52,17 +70,14 @@ export const createRoom = async (req, res) => {
   try {
     await newRoomPost.save();
     res.status(201).json(newRoomPost);
-    console.log("create ok");
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
 };
 
-
-
 export const updateRoom = async (req, res) => {
   const { id } = req.params;
-  const { name, price, details } = req.body;
+  const { name, price, description, availableDate, image, tags } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No room with id: ${id}`);
@@ -70,17 +85,20 @@ export const updateRoom = async (req, res) => {
   const updatedRoom = {
     name,
     price,
-    details,
+    description,
+    availableDate,
+    image,
+    tags,
+    location,
+    type,
     _id: id,
     updatedAt: new Date().toISOString(),
   };
 
-  await Rooms.findByIdAndUpdate(id, updatedRoom, { new: true });
+  await Room.findByIdAndUpdate(id, updatedRoom, { new: true });
 
   res.json(updatedRoom);
 };
-
-
 
 export const deleteRoom = async (req, res) => {
   const { id } = req.params;
@@ -88,7 +106,7 @@ export const deleteRoom = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No room with id: ${id}`);
 
-  await Rooms.findByIdAndRemove(id);
+  await Room.findByIdAndRemove(id);
 
   res.json({ message: "Room deleted successfully." });
 };
