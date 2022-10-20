@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import Room from "../models/room.js";
-import Accommodator  from "../models/accommodator";
+import Accommodator from '../models/accommodator.js'
 
 const router = express.Router();
 
