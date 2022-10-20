@@ -81,18 +81,16 @@ export const createRoom = async (req, res) => {
 
 export const updateRoom = async (req, res) => {
   const { id } = req.params;
-  const { name, price, description, availableDate, image, tags } = req.body;
+  const { name, price, availableDate, image } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No room with id: ${id}`);
-
+  // TODO:ayusin
   const updatedRoom = {
     name,
     price,
-    description,
     availableDate,
     image,
-    tags,
     location,
     type,
     _id: id,
