@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import Room from "../models/room.js";
-// import Accommodator  from "../models/accommodator";
+import Accommodator  from "../models/accommodator";
 
 const router = express.Router();
 
@@ -60,10 +60,14 @@ export const getRoom = async (req, res) => {
 
 export const createRoom = async (req, res) => {
   const room = req.body;
+  const owner = await Accommodator.findById(req.userId)
 
   const newRoomPost = new Room({
     ...room,
     creator: req.userId,
+    ownerName: owner.businessName,
+    category: owner.category,
+    location: owner.location,
     updatedAt: new Date().toISOString(),
   });
 

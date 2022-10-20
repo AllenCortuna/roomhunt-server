@@ -10,10 +10,7 @@ const accommodatorSchema = mongoose.Schema({
   location: { type: String, required: true },
   contact: { type: String, required: true },
   category: { type: String, required: true },
-  review: [{
-    type: Number,
-    
-  }],
+  review: [{ type: Number, }],
   image: { type: String, required: true },
   fetured: Boolean,
   verfied: { type: Boolean, default: false, required: true },
