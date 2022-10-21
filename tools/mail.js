@@ -30,7 +30,7 @@ export const mailTransport = ({OTP, result}) => {
     });
 
     let mailDetails = {
-      from: "olsencortuna@gmail.com",
+      from: "roomhunt@gmail.com",
       to: `${result.email}`,
       subject: "OTP",
       html: `<h1>${OTP}</h1>`,
