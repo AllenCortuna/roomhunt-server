@@ -3,7 +3,7 @@ import express from "express";
 import {
   getRooms,
   getOwnRooms,
-  createRoom,
+  uploadRoom,
   getRoom,
   updateRoom,
   deleteRoom,
