@@ -58,7 +58,7 @@ export const getRoom = async (req, res) => {
   }
 };
 
-export const createRoom = async (req, res) => {
+export const uploadRoom = async (req, res) => {
   const room = req.body;
   const owner = await Accommodator.findById(req.userId)
 

@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
 app.use("/accommodator", accommodatorRoutes);
-app.use("/rooms", roomRoutes);
+app.use("/room", roomRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello to Room hunt API");

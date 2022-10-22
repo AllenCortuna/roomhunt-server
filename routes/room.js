@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.get("/", getRooms);
 router.get("/", getOwnRooms);
-router.post("/", createRoom);
+router.post("/", uploadRoom);
 router.get("/:id", getRoom);
 router.patch("/:id", updateRoom);
 router.delete("/:id", deleteRoom);

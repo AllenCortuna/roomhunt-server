@@ -13,11 +13,11 @@ const expendSchema = mongoose.Schema({
   name: { type: String, default: "None" },
   price: { type: String, required: true },
   bed: { type: String, required: true },
-  aircon: { type: Boolean, required: true },
   image: { type: String, required: true },
   // date
   checkInDate:{ type: Date, default: null },
   checkOutDate:{ type: Date, default: null },
+  // aircon: { type: Boolean, required: true },
 });
 
 var Room = mongoose.model("Room", expendSchema);
