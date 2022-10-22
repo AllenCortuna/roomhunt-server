@@ -9,16 +9,16 @@ import {
   deleteRoom,
 } from "../controllers/room.js";
 
-// import auth from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 const router = express.Router();
 
 // WARNING: add auth for security
 
 router.get("/", getRooms);
 router.get("/", getOwnRooms);
-router.post("/", uploadRoom);
-router.get("/:id", getRoom);
-router.patch("/:id", updateRoom);
-router.delete("/:id", deleteRoom);
+router.post("/", auth, uploadRoom);
+router.get("/:id", auth, getRoom);
+router.patch("/:id", auth, updateRoom);
+router.delete("/:id", auth, deleteRoom);
 
 export default router;

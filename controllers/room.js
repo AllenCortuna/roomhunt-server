@@ -74,6 +74,7 @@ export const uploadRoom = async (req, res) => {
   try {
     await newRoomPost.save();
     res.status(201).json(newRoomPost);
+    console.log(newRoomPost)
   } catch (error) {
     res.status(409).json({ message: error.message });
   }

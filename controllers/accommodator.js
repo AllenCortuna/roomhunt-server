@@ -6,7 +6,8 @@ import mongoose from "mongoose";
 import Accommodator from "../models/accommodator.js";
 import VerificationToken from "../models/verificationTokenAcc.js";
 import AccVerify from "../models/accVerify.js";
-const secret = "test";
+
+const SECRET = process.env.SECRET;
 
 export const signup = async (req, res) => {
   const {
@@ -86,7 +87,7 @@ export const verifyEmail = async (req, res) => {
     await acc.save();
 
     mailVerified(acc.email);
-    const token = jwt.sign({ email: acc.email, id: acc._id }, secret, {
+    const token = jwt.sign({ email: acc.email, id: acc._id }, SECRET, {
       expiresIn: "1w",
     });
     res.status(200).json({ result: acc, token });
@@ -137,7 +138,7 @@ export const login = async (req, res) => {
 
     const token = jwt.sign(
       { email: oldAccommodator.email, id: oldAccommodator._id },
-      secret,
+      SECRET,
       { expiresIn: "1w" }
     );
     console.log("login ok");
