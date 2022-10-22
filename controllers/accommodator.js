@@ -7,6 +7,9 @@ import Accommodator from "../models/accommodator.js";
 import VerificationToken from "../models/verificationTokenAcc.js";
 import AccVerify from "../models/accVerify.js";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const SECRET = process.env.SECRET;
 
 export const signup = async (req, res) => {
