@@ -16,15 +16,13 @@ export const getRooms = async (req, res) => {
 
 export const uploadRoom = async (req, res) => {
   console.log("room");
-  const { price, name, checkInDate, checkOutDate, image } = req.body;
+  // const { price, name, checkInDate, checkOutDate, image } = req.body;
+  const room = req.body;
   const owner = await Accommodator.findById(req.userId);
   const newRoomPost = new Room({
-    price,
-    name,
-    checkInDate,
-    checkOutDate,
-    image,
+    ...room,
     owner: req.userId,
+    updatedAt: new Date(),
     ownerName: owner.businessName,
     category: owner.category,
     location: owner.location,
