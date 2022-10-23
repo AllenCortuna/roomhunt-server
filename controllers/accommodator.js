@@ -13,6 +13,7 @@ dotenv.config();
 const SECRET = process.env.SECRET;
 
 export const signup = async (req, res) => {
+console.log("signup try")
   const {
     email,
     businessName,
@@ -76,7 +77,7 @@ export const verifyEmail = async (req, res) => {
     const acc = await Accommodator.findById(accommodatorId);
     // kung meron yung account ng accommodator sa database
     if (!acc)
-      return res.status(404).json({ message: "Accommodator not Found" });
+      return res.status(404).json({ message: "Account not Found" });
     // kung verified na already
     if (acc.verified)
       return res.status(403).json({ message: "Account already verified" });
@@ -106,9 +107,9 @@ export const verifyAcc = async (req, res) => {
   try {
     const alredySubmit = await AccVerify.findOne({ owner });
     if (!owner || !validID || !businessPermit)
-      return res.status(400).json({ message: "Invalid Requestno parameters" });
+      return res.status(400).json({ message: "Invalid Request no parameters" });
     if (alredySubmit)
-      return res.status(403).json({ message: "already submitted" });
+      return res.status(403).json({ message: "Already Submitted" });
     const files = new AccVerify({
       owner,
       validID,
