@@ -62,10 +62,10 @@ export const getRoomBySearch = async (req, res) => {
 };
 
 export const getOwnRooms = async (req, res) => {
-  const { myid } = req.params;
+  const { id } = req.params;
 
   try {
-    const rooms = await Room.find({ creator: myid });
+    const rooms = await Room.find({ creator: id });
     res.status(200).json(rooms);
   } catch (error) {
     res.status(404).json({ message: error.message });
