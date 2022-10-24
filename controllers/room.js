@@ -73,7 +73,7 @@ export const getOwnRooms = async (req, res) => {
 };
 
 export const getRoom = async (req, res) => {
-  const { id } = req.params;
+  const id = req.params;
 
   try {
     const room = await Room.findById(id);
@@ -107,14 +107,17 @@ export const updateRoom = async (req, res) => {
 };
 
 export const deleteRoom = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return res.status(404).send(`No room with id: ${id}`);
+    await Room.findByIdAndRemove(id);
 
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`No room with id: ${id}`);
-
-  await Room.findByIdAndRemove(id);
-
-  res.json({ message: "Room deleted successfully." });
+    res.json({ message: "Room deleted successfully." });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export default router;
