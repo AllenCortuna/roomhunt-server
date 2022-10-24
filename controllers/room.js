@@ -15,7 +15,7 @@ export const getRooms = async (req, res) => {
 };
 
 export const uploadRoom = async (req, res) => {
-  console.log("room");
+  console.log("uploadRoomroom");
   // const { price, name, checkInDate, checkOutDate, image } = req.body;
   const room = req.body;
   const owner = await Accommodator.findById(req.userId);
@@ -32,10 +32,8 @@ export const uploadRoom = async (req, res) => {
   try {
     await newRoomPost.save();
     res.status(201).json(newRoomPost);
-    console.log(newRoomPost);
   } catch (error) {
     res.status(409).json({ message: error.message });
-    console.log(error);
   }
 };
 
@@ -63,9 +61,8 @@ export const getRoomBySearch = async (req, res) => {
 
 export const getOwnRooms = async (req, res) => {
   const { id } = req.params;
-
   try {
-    const rooms = await Room.find({ creator: id });
+    const rooms = await Room.find({ owner: id });
     res.status(200).json(rooms);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -115,7 +112,6 @@ export const deleteRoom = async (req, res) => {
 
     res.json({ message: "Room deleted successfully." });
   } catch (error) {
-    console.log(error);
     res.status(404).json({ message: error.message });
   }
 };
