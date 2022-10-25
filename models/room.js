@@ -1,11 +1,7 @@
 import mongoose from "mongoose";
 
 const expendSchema = mongoose.Schema({
-  owner : {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Accommodator",
-    required: true,  
-  },
+  owner : { type: mongoose.Schema.Types.ObjectId, ref: "Accommodator", required: true,  },
   ownerName: { type: String, required: true },
   category: { type: String, required: true },
   location: { type: String, required: true },
