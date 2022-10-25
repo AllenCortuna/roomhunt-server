@@ -37,31 +37,36 @@ export const uploadRoom = async (req, res) => {
 };
 
 export const updateRoom = async (req, res) => {
-  const id = req.params;
-  // const  room  = req.body;
-  const { price, name, checkInDate, checkOutDate, image } = req.body;
-  const owner = await Accommodator.findById(req.userId);
+  try {
+    const id = req.params;
+    // const  room  = req.body;
+    const { price, name, bed, checkInDate, checkOutDate, image } = req.body;
+    const owner = await Accommodator.findById(req.userId);
 
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`No room with id: ${id}`);
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return res.status(404).send(`No room with id: ${id}`);
 
-  const updatedRoom = {
-    _id: id,
-    price,
-    name,
-    checkInDate,
-    checkOutDate,
-    image,
-    owner: req.userId,
-    ownerName: owner.businessName,
-    category: owner.category,
-    location: owner.location,
-    updatedAt: new Date().toISOString(),
-  };
+    const updatedRoom = {
+      _id: id,
+      price,
+      name,
+      bed,
+      checkInDate,
+      checkOutDate,
+      image,
+      owner: req.userId,
+      ownerName: owner.businessName,
+      category: owner.category,
+      location: owner.location,
+      updatedAt: new Date().toISOString(),
+    };
 
-  await Room.findByIdAndUpdate(id, updatedRoom, { new: true });
+    await Room.findByIdAndUpdate(id, updatedRoom, { new: true });
 
-  res.json(updatedRoom);
+    res.json(updatedRoom);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 export const getRoomBySearch = async (req, res) => {
@@ -108,7 +113,7 @@ export const getRoom = async (req, res) => {
 };
 
 export const deleteRoom = async (req, res) => {
-  console.log("deleted")
+  console.log("deleted");
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id))
