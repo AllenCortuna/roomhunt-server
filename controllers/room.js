@@ -38,7 +38,7 @@ export const uploadRoom = async (req, res) => {
 
 export const updateRoom = async (req, res) => {
   try {
-    const id = req.params;
+    const {id} = req.params;
     // const  room  = req.body;
     const { price, name, bed, checkInDate, checkOutDate, image } = req.body;
     const owner = await Accommodator.findById(req.userId);
