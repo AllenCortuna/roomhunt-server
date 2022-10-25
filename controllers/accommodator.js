@@ -13,7 +13,6 @@ dotenv.config();
 const SECRET = process.env.SECRET;
 
 export const signup = async (req, res) => {
-console.log("signup try")
   const {
     email,
     businessName,
@@ -76,8 +75,7 @@ export const verifyEmail = async (req, res) => {
 
     const acc = await Accommodator.findById(accommodatorId);
     // kung meron yung account ng accommodator sa database
-    if (!acc)
-      return res.status(404).json({ message: "Account not Found" });
+    if (!acc) return res.status(404).json({ message: "Account not Found" });
     // kung verified na already
     if (acc.verified)
       return res.status(403).json({ message: "Account already verified" });
@@ -125,6 +123,7 @@ export const verifyAcc = async (req, res) => {
 
 // LOGIN
 export const login = async (req, res) => {
+  console.log("signup try");
   const { email, password } = req.body;
 
   try {
