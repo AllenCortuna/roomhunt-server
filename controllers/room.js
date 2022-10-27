@@ -113,7 +113,6 @@ export const getRoom = async (req, res) => {
 };
 
 export const deleteRoom = async (req, res) => {
-  console.log("deleted");
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id))
