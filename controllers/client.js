@@ -3,21 +3,12 @@ import jwt from "jsonwebtoken";
 import { generateOTP, mailTransport, mailVerified } from "../tools/mail.js";
 import VerificationToken from "../models/verificationTokenAcc.js";
 import mongoose from "mongoose";
+import Client from "../models/client.js";
+const SECRET = process.env.SECRET;
 // import AccVerify from "../models/accVerify.js";
 
-import Client from "../models/client.js";
-
-export const getClients = async (req, res) => {
-  try {
-    const user = await Client.find();
-    console.log("getuser ok");
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-};
-
-
+import dotenv from "dotenv";
+dotenv.config();
 export const signup = async (req, res) => {
   
   const { email, password , birthday, name} = req.body;
@@ -58,6 +49,8 @@ export const signup = async (req, res) => {
 export const verifyEmail = async (req, res) => {
   try {
     const { otp, clientId } = req.body;
+    console.log(clientId)
+    console.log(otp)
     //check if the valid params
     if (!clientId || !otp.trim())
       return res.status(400).json({ message: "Invalid Request no parameters" });
@@ -69,13 +62,13 @@ export const verifyEmail = async (req, res) => {
     // kung meron yung account 
     if (!client) return res.status(404).json({ message: "Account not Found" });
     // kung verified na already
-    if (client.verified)
+    if (client.verifiedEmail)
       return res.status(403).json({ message: "Account already verified" });
     const verToken = await VerificationToken.findOne({ owner: client._id });
     if (!verToken) return res.status(404).json({ message: "Token not found" });
     const isMatch = await verToken.compareToken(otp);
     if (!isMatch) return res.status(500).json({ message: "OTP not match" });
-    client.verfiedEmail = true;
+    client.verifiedEmail = true;
     client.expireAt = null;
     await VerificationToken.findOneAndDelete(verToken._id);
     await client.save();

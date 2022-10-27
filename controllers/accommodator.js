@@ -9,7 +9,6 @@ import AccVerify from "../models/accVerify.js";
 
 import dotenv from "dotenv";
 dotenv.config();
-
 const SECRET = process.env.SECRET;
 
 export const signup = async (req, res) => {
@@ -83,7 +82,7 @@ export const verifyEmail = async (req, res) => {
     if (!verToken) return res.status(404).json({ message: "Token not found" });
     const isMatch = await verToken.compareToken(otp);
     if (!isMatch) return res.status(500).json({ message: "OTP not match" });
-    acc.verfiedEmail = true;
+    acc.verifiedEmail = true;
     acc.expireAt = null;
     await VerificationToken.findOneAndDelete(verToken._id);
     await acc.save();
@@ -123,7 +122,6 @@ export const verifyAcc = async (req, res) => {
 
 // LOGIN
 export const login = async (req, res) => {
-  console.log("signup try");
   const { email, password } = req.body;
 
   try {
