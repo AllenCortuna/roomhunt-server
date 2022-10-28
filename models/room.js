@@ -7,8 +7,8 @@ const expendSchema = mongoose.Schema({
   location: { type: String, required: true },
   updatedAt: { type: Date, default: new Date() },
   name: { type: String, default: "None" },
-  price: { type: String, required: true },
-  bed: { type: String, required: true },
+  price: { type: Number, required: true },
+  bed: { type: Number, required: true },
   image: { type: String, required: true },
   // date
   checkInDate:{ type: Date, default: null },

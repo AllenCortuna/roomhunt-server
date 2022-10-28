@@ -3,6 +3,7 @@ import express from "express";
 import {
   getRooms,
   getOwnRooms,
+  getRoomBySearch,
   uploadRoom,
   getRoom,
   updateRoom,
@@ -15,6 +16,7 @@ const router = express.Router();
 // WARNING: add auth for security
 
 router.get("/", getRooms);
+router.get("/search", getRoomBySearch);
 router.post("/", auth, uploadRoom);
 router.get("/:id", getOwnRooms);
 router.get("/:id", auth, getRoom);

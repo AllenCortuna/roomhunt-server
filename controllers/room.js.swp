@@ -38,7 +38,7 @@ export const uploadRoom = async (req, res) => {
 
 export const updateRoom = async (req, res) => {
   try {
-    const { id } = req.params;
+    const {id} = req.params;
     // const  room  = req.body;
     const { price, name, bed, checkInDate, checkOutDate, image } = req.body;
     const owner = await Accommodator.findById(req.userId);
@@ -70,30 +70,20 @@ export const updateRoom = async (req, res) => {
 };
 
 export const getRoomBySearch = async (req, res) => {
-  const {
-    category,
-    location,
-    bed,
-    checkInDate,
-    checkOutDate,
-    minPrice,
-    maxPrice,
-  } = req.query;
+  console.log("search rooms")
+  const { location, category, bed, checkInDate, checkOutDate, minPrice, maxPrice } = req.query;
   try {
     const loc = new RegExp(location, "i");
     const rooms = await Room.find({
-      location: loc,
+      $or: [{ loc }],
+      aircon: aircon,
       category: category,
       bed: bed,
-      price: { $gte: minPrice, $lte: maxPrice },
+      price: {$gte:minPrice, $lte: maxPrice},
       $or: [
         {
-          checkInDate: { $gte: checkInDate, $gte: checkOutDate },
-          checkOutDate: { $gte: checkInDate, $gte: checkOutDate },
-        },
-        {
-          checkInDate: { $lte: checkInDate, $lte: checkOutDate },
-          checkOutDate: { $lte: checkInDate, $lte: checkOutDate },
+          checkInDate: { $lte: checkInDate },
+          checkOutDate: { $gte: checkOutDate },
         },
       ],
     });
