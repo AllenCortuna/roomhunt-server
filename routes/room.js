@@ -18,8 +18,8 @@ const router = express.Router();
 router.get("/", getRooms);
 router.get("/search", getRoomBySearch);
 router.post("/", auth, uploadRoom);
-router.get("/:id", getOwnRooms);
-router.get("/:id", auth, getRoom);
+router.get("/own/:id", getOwnRooms);
+router.get("/:id", getRoom);
 router.patch("/:id", auth, updateRoom);
 router.delete("/:id", auth, deleteRoom);
 

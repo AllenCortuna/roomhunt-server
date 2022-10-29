@@ -99,6 +99,7 @@ export const getRoomBySearch = async (req, res) => {
     });
     res.status(200).json(rooms);
   } catch (error) {
+    console.log(error.message)
     res.status(404).json({ message: error.message });
   }
 };
@@ -114,8 +115,7 @@ export const getOwnRooms = async (req, res) => {
 };
 
 export const getRoom = async (req, res) => {
-  const id = req.params;
-
+  const {id} = req.params;
   try {
     const room = await Room.findById(id);
     res.status(200).json(room);
