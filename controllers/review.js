@@ -13,61 +13,68 @@ export const reviewRoom = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(room))
     return res.status(404).send(`No room with id: ${room}`);
 
-  const alreadyReview = await Review.find({
+  const reviewed = await Review.findOne({
     senderId: senderId,
+    room: room,
   });
-
-  // WARN: if client already review
-  if (alreadyReview) {
-    await Review.findOneAndUpdate(alreadyReview._id, {
+  // WARN: REVIEWED
+  if (reviewed) {
+    await reviewed.update({ room, senderId, review });
+    await review.save();
+    const total = await Review.countDocuments({
       senderId: senderId,
       room: room,
-      review: review,
-      updatedAt: new Date().toISOString(),
     });
-
     const roomReview = await Review.find({
       room: room,
-    });
-    // const totalReview = obj => roomReview.review(obj).reduce((a, b) => a + b);
-    const total = roomReview.length;
-    const totalReview = roomReview
-      .map((rev) => rev.review)
-      .reduce((accumulator, value) => {
-        return parseInt(accumulator) + parseInt(value);
-      }, 0);
-    console.log("total", total);
-    console.log("totalReview", totalReview);
-    const result = await Room.findOneAndUpdate(room, {
-      review: totalReview / total,
+    }).map((a) => a.review);
+    console.log("roomReview", roomReview);
+
+    function calculateAverage(arr) {
+      var total = 0;
+      var count = 0;
+      arr.forEach(function (item, index) {
+        total += item;
+        count++;
+      });
+      return total / count;
+    }
+    const mean = calculateAverage(roomReview);
+    const result = await Room.findOneAndUpdate(id, {
+      ...others,
+      review: mean,
       total: total,
-      updatedAt: new Date().toISOString(),
     });
     res.json(result);
-    console.log(result);
   } else {
-    const review = new Review({
-      room: room,
+    await new Review({
+      room,
+      senderId,
+      review,
+    }).save();
+    const total = await Review.countDocuments({
       senderId: senderId,
-      review: review,
+      room: room,
     });
-    //find review with the same roomID
     const roomReview = await Review.find({
       room: room,
-    });
-    // const totalReview = obj => roomReview.review(obj).reduce((a, b) => a + b);
-    const total = roomReview.length;
-    const totalReview = roomReview
-      .map((rev) => rev.review)
-      .reduce((accumulator, value) => {
-        return parseInt(accumulator) + parseInt(value);
-      }, 0);
-    console.log("total", total);
-    console.log("totalReview", totalReview);
+    }).map((a) => a.review);
+    console.log("roomReview", roomReview);
+
+    function calculateAverage(arr) {
+      var total = 0;
+      var count = 0;
+      arr.forEach(function (item, index) {
+        total += item;
+        count++;
+      });
+      return total / count;
+    }
+    const mean = calculateAverage(roomReview);
     const result = await Room.findOneAndUpdate(id, {
-      review: totalReview / total,
+      ...others,
+      review: mean,
       total: total,
-      updatedAt: new Date().toISOString(),
     });
     res.json(result);
   }
