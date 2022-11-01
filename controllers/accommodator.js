@@ -22,6 +22,7 @@ export const signup = async (req, res) => {
     category,
     image,
   } = req.body;
+  
 
   try {
     const oldAccommodator = await Accommodator.findOne({ email });

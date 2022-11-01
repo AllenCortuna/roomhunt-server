@@ -11,7 +11,6 @@ const expendSchema = mongoose.Schema({
     type: Number,
     min: 1,
     max: 5,
-    validate: { validate: Number.isInteger },
   },
   updatedAt: { type: Date, default: new Date() },
 });
