@@ -5,7 +5,7 @@ import { generateOTP, mailTransport, mailVerified } from "../tools/mail.js";
 import mongoose from "mongoose";
 import Accommodator from "../models/accommodator.js";
 import VerificationToken from "../models/verificationTokenAcc.js";
-import AccVerify from "../models/accVerify.js";
+// import AccVerify from "../models/accVerify.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -98,28 +98,6 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
-// VERFIY ACCOMMODATORS INFO
-export const verifyAcc = async (req, res) => {
-  const { owner, validID, businessPermit } = req.body;
-  try {
-    const alredySubmit = await AccVerify.findOne({ owner });
-    if (!owner || !validID || !businessPermit)
-      return res.status(400).json({ message: "Invalid Request no parameters" });
-    if (alredySubmit)
-      return res.status(403).json({ message: "Already Submitted" });
-    const files = new AccVerify({
-      owner,
-      validID,
-      businessPermit,
-    });
-    await files.save();
-    res.status(203).json({ message: "Files submitted" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Something went wrong " });
-  }
-};
-
 // LOGIN
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -148,3 +126,25 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "Something went wrong " });
   }
 };
+
+// VERFIY ACCOMMODATORS INFO
+// export const verifyAcc = async (req, res) => {
+//   const { owner, validID, businessPermit } = req.body;
+//   try {
+//     const alredySubmit = await AccVerify.findOne({ owner });
+//     if (!owner || !validID || !businessPermit)
+//       return res.status(400).json({ message: "Invalid Request no parameters" });
+//     if (alredySubmit)
+//       return res.status(403).json({ message: "Already Submitted" });
+//     const files = new AccVerify({
+//       owner,
+//       validID,
+//       businessPermit,
+//     });
+//     await files.save();
+//     res.status(203).json({ message: "Files submitted" });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: "Something went wrong " });
+//   }
+// };
