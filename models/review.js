@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const expendSchema = mongoose.Schema({
-  room: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
-  reviewer: {
+  roomId: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
+  senderId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
     required: true,
@@ -16,5 +16,5 @@ const expendSchema = mongoose.Schema({
   updatedAt: { type: Date, default: new Date() },
 });
 
-var Room = mongoose.model("Room", expendSchema);
-export default Room;
+var Review = mongoose.model("Review", expendSchema);
+export default Review;

@@ -137,16 +137,4 @@ export const deleteRoom = async (req, res) => {
   }
 };
 
-export const reviewRoom = async (req, res) => {
-  const { id } = req.params;
-  const { review } = req.body;
-  const room = await Room.findById(id);
-  if (!room) {
-    res.status(404).json({ message: "Room not Found!" });
-  }
-  
-
-
-}
-
 export default router;
