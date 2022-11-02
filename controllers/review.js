@@ -16,11 +16,9 @@ export const reviewRoom = async (req, res) => {
     room: room,
     senderId: senderId,
   });
-  console.log("reviewed:",reviewed)
   // WARN: REVIEWED
   if (reviewed) {
-    console.log("ALREADY ");
-    await reviewed.update({ room, senderId, review });
+    await reviewed.updateOne({ room, senderId, review });
     await reviewed.save();
     const total = await Review.countDocuments({
       room: room,
@@ -29,8 +27,6 @@ export const reviewRoom = async (req, res) => {
       room: room,
     })
     const sum = roomReview.map((a) => a.review);
-    console.log("sum", sum);
-    console.log("total", sum.length);
     function calculateAverage(arr) {
       var total = 0;
       var count = 0;
@@ -41,7 +37,6 @@ export const reviewRoom = async (req, res) => {
       return total / count;
     }
     const mean = calculateAverage(sum);
-    console.log("mean:",mean)
     const result = await Room.findOneAndUpdate(room, {
       review: mean,
       total: total,
@@ -49,7 +44,6 @@ export const reviewRoom = async (req, res) => {
     res.status(201).json({ result });
   } else {
     
-    console.log("NOT ALREADY ")
     await new Review({
       room,
       senderId,
@@ -62,7 +56,6 @@ export const reviewRoom = async (req, res) => {
       room: room,
     })
     const sum = roomReview.map((a) => a.review);
-    console.log("roomReview", sum);
 
     function calculateAverage(arr) {
       var total = 0;
@@ -74,8 +67,7 @@ export const reviewRoom = async (req, res) => {
       return total / count;
     }
     const mean = calculateAverage(sum);
-    console.log("mean:",mean)
-    const result = await Room.findOneAndUpdate(room, {
+    const result = await Room.findByIdAndUpdate(room, {
       review: mean,
       total: total,
     });
