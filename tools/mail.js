@@ -70,3 +70,28 @@ export const mailVerified = (email) => {
       }
     });
 }
+
+export const mailPassReset = (email) => {
+    let mailTransporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "olsencortuna@gmail.com",
+        pass: "yeopsbeprvyefdvt",
+      },
+    });
+
+    let mailDetails = {
+      from: "olsencortuna@gmail.com",
+      to: `${email}`,
+      subject: "OTP",
+      html: `<h1>Email Verified Successfully</h1>`,
+    };
+
+    return mailTransporter.sendMail(mailDetails, function (err, data) {
+      if (err) {
+        console.log("Error Occurs");
+      } else {
+        console.log("Email sent successfully");
+      }
+    });
+}
