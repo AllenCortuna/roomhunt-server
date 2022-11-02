@@ -75,7 +75,7 @@ export const verifyEmail = async (req, res) => {
 
     mailVerified(client.email);
     const token = jwt.sign({ email: client.email, id: client._id }, SECRET, {
-      expiresIn: "1w",
+      expiresIn: "1d",
     });
     res.status(200).json({ result: client, token });
   } catch (err) {
@@ -105,7 +105,7 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       { email: oldClient.email, id: oldClient._id },
       process.env.SECRET,
-      { expiresIn: "1w" }
+      { expiresIn: "1d" }
     );
     console.log("login ok");
     res.status(200).json({ result: oldClient, token });

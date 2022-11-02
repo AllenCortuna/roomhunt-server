@@ -90,7 +90,7 @@ export const verifyEmail = async (req, res) => {
 
     mailVerified(acc.email);
     const token = jwt.sign({ email: acc.email, id: acc._id }, SECRET, {
-      expiresIn: "1w",
+      expiresIn: "1d",
     });
     res.status(200).json({ result: acc, token });
   } catch (err) {
@@ -119,7 +119,7 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       { email: oldAccommodator.email, id: oldAccommodator._id },
       SECRET,
-      { expiresIn: "1w" }
+      { expiresIn: "1d" }
     );
     console.log("login ok");
     res.status(200).json({ result: oldAccommodator, token });

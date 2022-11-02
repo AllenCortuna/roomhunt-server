@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const expendSchema = mongoose.Schema({
-  roomId: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
+  room: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
   senderId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
