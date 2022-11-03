@@ -9,8 +9,11 @@ const router = express.Router();
 export const reviewRoom = async (req, res) => {
   try {
     const { room, senderId, review } = req.body;
-    if (!room || !senderId || !review) {
-      return res.status(404).send(`Invalid param`);
+    if (!review) {
+      return res.status(404).send("No Review");
+    }
+    if (!senderId) {
+      return res.status(404).send("Pls Regiter/Login first to Send Review");
     }
 
     if (!mongoose.Types.ObjectId.isValid(room))
@@ -45,8 +48,8 @@ export const reviewRoom = async (req, res) => {
         review: mean,
         total: total,
       });
-      const result = await Room.findById(room)
-      console.log(result)
+      const result = await Room.findById(room);
+      console.log(result);
       res.status(200).json(result);
     } else {
       await new Review({
@@ -77,7 +80,8 @@ export const reviewRoom = async (req, res) => {
         total: total,
       });
 
-      const result = await Room.findById(room)
+      const result = await Room.findById(room);
+      console.log(result);
       res.status(200).json(result);
     }
   } catch (error) {
