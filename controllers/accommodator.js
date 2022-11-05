@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-    console.log(err);
+console.log(err);
 import jwt from "jsonwebtoken";
 // import nodemailer from 'nodemailer'
 import { generateOTP, mailTransport, mailVerified } from "../tools/mail.js";
@@ -23,7 +23,6 @@ export const signup = async (req, res) => {
     category,
     image,
   } = req.body;
-  
 
   try {
     const oldAccommodator = await Accommodator.findOne({ email });
@@ -95,7 +94,6 @@ export const verifyEmail = async (req, res) => {
     });
     res.status(200).json({ result: acc, token });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Something went wrong " });
   }
 };
@@ -107,15 +105,16 @@ export const login = async (req, res) => {
   try {
     const oldAccommodator = await Accommodator.findOne({ email });
     if (!oldAccommodator)
-      return res.status(400).json({ message: "Accommodator does not exist " });
+      return res.status(404).json({ message: "Accommodator does not exist " });
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
       oldAccommodator.password
     );
 
-    if (!isPasswordCorrect)
-      return res.status(400).json({ message: "Invalid password" });
+    if (!isPasswordCorrect) {
+      return res.status(404).json({ message: "Invalid password" });
+    }
 
     const token = jwt.sign(
       { email: oldAccommodator.email, id: oldAccommodator._id },
