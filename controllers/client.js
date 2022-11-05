@@ -15,7 +15,7 @@ export const signup = async (req, res) => {
   try {
     const oldClient = await Client.findOne({ email });
     if (oldClient)
-      return res.status(400).json({ message: "Client already exist" });
+      return res.status(409).json({ message: "Client already exist" });
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const newAcc = new Client({
@@ -99,7 +99,7 @@ export const login = async (req, res) => {
     );
 
     if (!isPasswordCorrect)
-      return res.status(404).json({ message: "Invalid password" });
+      return res.status(401).json({ message: "Invalid password" });
 
     const token = jwt.sign(
       { email: oldClient.email, id: oldClient._id },

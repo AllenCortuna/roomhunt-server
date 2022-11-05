@@ -26,7 +26,7 @@ export const signup = async (req, res) => {
   try {
     const oldAccommodator = await Accommodator.findOne({ email });
     if (oldAccommodator)
-      return res.status(400).json({ message: "Account already exist" });
+      return res.status(409).json({ message: "Account already exist" });
 
     const hashedPassword = await bcrypt.hash(password, 12);
     // save new accomodator
@@ -112,7 +112,7 @@ export const login = async (req, res) => {
     );
 
     if (!isPasswordCorrect) {
-      return res.status(404).json({ message: "Invalid password" });
+      return res.status(401).json({ message: "Invalid password" });
     }
 
     const token = jwt.sign(
