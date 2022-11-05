@@ -13,8 +13,8 @@ export const signup = async (req, res) => {
   const { email, password, birthday, name } = req.body;
   try {
     const oldClient = await Client.findOne({ email });
-    if (oldClient)
-      return res.status(409).json({ message: "Client already exist" });
+    if (oldClient){
+      return res.status(409).json({ message: "Client already exist" })};
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const newAcc = new Client({
