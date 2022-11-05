@@ -26,7 +26,7 @@ export const signup = async (req, res) => {
   try {
     const oldAccommodator = await Accommodator.findOne({ email });
     if (oldAccommodator)
-      return res.status(400).json({ message: "Accommodator already exist" });
+      return res.status(400).json({ message: "Account already exist" });
 
     const hashedPassword = await bcrypt.hash(password, 12);
     // save new accomodator
@@ -70,7 +70,7 @@ export const verifyEmail = async (req, res) => {
       return res.status(400).json({ message: "Invalid Request no parameters" });
     // check if tama yung id ng accommodator
     if (!mongoose.isValidObjectId(accommodatorId))
-      return res.status(404).json({ message: "Invalid accommodator" });
+      return res.status(404).json({ message: "Invalid Accommodator Id" });
 
     const acc = await Accommodator.findById(accommodatorId);
     // kung meron yung account ng accommodator sa database
@@ -104,7 +104,7 @@ export const login = async (req, res) => {
   try {
     const oldAccommodator = await Accommodator.findOne({ email });
     if (!oldAccommodator)
-      return res.status(404).json({ message: "Accommodator does not exist " });
+      return res.status(404).json({ message: "Account does not exist " });
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
@@ -120,7 +120,6 @@ export const login = async (req, res) => {
       SECRET,
       { expiresIn: "1d" }
     );
-    console.log("login ok");
     res.status(200).json({ result: oldAccommodator, token });
   } catch (err) {
     res.status(500).json({ message: `Something went wrong ${err.mesagge} ` });
