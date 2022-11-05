@@ -10,8 +10,7 @@ const SECRET = process.env.SECRET;
 import dotenv from "dotenv";
 dotenv.config();
 export const signup = async (req, res) => {
-  
-  const { email, password , birthday, name} = req.body;
+  const { email, password, birthday, name } = req.body;
   try {
     const oldClient = await Client.findOne({ email });
     if (oldClient)
@@ -44,23 +43,24 @@ export const signup = async (req, res) => {
   }
 };
 
-
 // VERIFIFY EMAIL
 export const verifyEmail = async (req, res) => {
   try {
     const { otp, clientId } = req.body;
-    console.log(clientId)
-    console.log(otp)
+    console.log(clientId);
+    console.log(otp);
     //check if the valid params
     if (!clientId || !otp.trim())
       return res.status(400).json({ message: "Invalid Request no parameters" });
-    // check if tama yung id 
+    // check if tama yung id
     if (!mongoose.isValidObjectId(clientId))
       return res.status(404).json({ message: "Invalid Client" });
 
     const client = await Client.findById(clientId);
-    // kung meron yung account 
-    if (!client) return res.status(404).json({ message: "Account not Found" });
+    // kung meron yung account
+    if (!client) {
+      return res.status(404).json({ message: "Account not Found" });
+    }
     // kung verified na already
     if (client.verifiedEmail)
       return res.status(403).json({ message: "Account already verified" });
@@ -83,15 +83,14 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
-
-
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const oldClient = await Client.findOne({ email });
-    if (!oldClient)
-      return res.status(404).json({ message: "Client does not exist " });
+    if (!oldClient) {
+      return res.status(404).json({ message: "Client does not exist " })
+    };
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
