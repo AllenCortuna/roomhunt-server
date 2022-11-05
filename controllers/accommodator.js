@@ -25,8 +25,9 @@ export const signup = async (req, res) => {
 
   try {
     const oldAccommodator = await Accommodator.findOne({ email });
-    if (oldAccommodator)
+    if (oldAccommodator) {
       return res.status(409).json({ message: "Account already exist" });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 12);
     // save new accomodator
@@ -52,7 +53,6 @@ export const signup = async (req, res) => {
     const result = await newAcc.save();
 
     mailTransport({ OTP, result });
-    // auth token
     res.status(201).json({ result });
     console.log(OTP);
   } catch (error) {
@@ -103,17 +103,19 @@ export const login = async (req, res) => {
 
   try {
     const oldAccommodator = await Accommodator.findOne({ email });
-    if (!oldAccommodator)
+    if (!oldAccommodator) {
       return res.status(404).json({ message: "Account does not exist " });
+    }
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
       oldAccommodator.password
     );
 
+    
     if (!isPasswordCorrect) {
-      return res.status(401).json({ message: "Invalid password" });
-    }
+      return res.status(401).json({ message: "Invalid password" })
+    };
 
     const token = jwt.sign(
       { email: oldAccommodator.email, id: oldAccommodator._id },
@@ -122,7 +124,7 @@ export const login = async (req, res) => {
     );
     res.status(200).json({ result: oldAccommodator, token });
   } catch (err) {
-    res.status(500).json({ message: `Something went wrong ${err.mesagge} ` });
+    res.status(500).json({ message: `Something went wrong ${err} ` });
   }
 };
 
