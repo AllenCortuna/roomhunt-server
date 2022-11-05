@@ -44,7 +44,7 @@ export const updateRoom = async (req, res) => {
     const owner = await Accommodator.findById(req.userId);
 
     if (!mongoose.Types.ObjectId.isValid(id))
-      return res.status(404).send(`No room with id: ${id}`);
+      return res.status(404).send({message: `No room with id: ${id}`});
 
     const updatedRoom = {
       _id: id,
