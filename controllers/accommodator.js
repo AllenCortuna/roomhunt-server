@@ -1,5 +1,4 @@
 import bcrypt from "bcryptjs";
-console.log(err);
 import jwt from "jsonwebtoken";
 // import nodemailer from 'nodemailer'
 import { generateOTP, mailTransport, mailVerified } from "../tools/mail.js";
@@ -124,7 +123,7 @@ export const login = async (req, res) => {
     console.log("login ok");
     res.status(200).json({ result: oldAccommodator, token });
   } catch (err) {
-    res.status(500).json({ message: "Something went wrong " });
+    res.status(500).json({ message: `Something went wrong ${err.mesagge} ` });
   }
 };
 
