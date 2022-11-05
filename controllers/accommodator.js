@@ -102,9 +102,11 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    
     const oldAccommodator = await Accommodator.findOne({ email });
+    
     if (!oldAccommodator) {
-      return res.status(404).json({ message: "Account does not exist " });
+      return res.status(401).json({ message: "Account does not exist" });
     }
 
     const isPasswordCorrect = await bcrypt.compare(
