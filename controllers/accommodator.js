@@ -11,6 +11,20 @@ import dotenv from "dotenv";
 dotenv.config();
 const SECRET = process.env.SECRET;
 
+
+export const getAcc = async (req, res) => {
+  try {
+    const { id } = req.params
+    const acc = await Accommodator.findById(id)
+    if (!acc) {
+      return res.status(404).json({ message: "Accommodator does not exist" });
+    }
+    res.status(200).json(acc);
+  } catch (error) {
+    res.status(500).json({ message: `Something went wrong${error.message}` });
+  }
+}
+
 export const signup = async (req, res) => {
   const {
     email,

@@ -5,12 +5,12 @@ import {
   login,
   signup,
   verifyEmail,
+  getAcc
   // verifyAcc,
 } from "../controllers/accommodator.js";
 
-// router.get('/', getAccommodators);
-// router.get('/', getAccommodator);
 // router.post("/verify-acc", verifyAcc);
+router.get('/:id', getAcc);
 router.post("/login", login);
 router.post("/signup", signup);
 router.post("/verify-email", verifyEmail);
