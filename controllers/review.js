@@ -6,18 +6,17 @@ import Review from "../models/review.js";
 
 const router = express.Router();
 
-
 export const getReviews = async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params;
+  console.log(id);
   try {
-    console.log(id)
-    const result = await Review.find({room: id})
+    const result = await Review.find({ room: id });
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ message: err.message });
-    console.log(err)
+    console.log(err);
   }
-}
+};
 
 export const reviewRoom = async (req, res) => {
   try {
@@ -36,6 +35,16 @@ export const reviewRoom = async (req, res) => {
       room: room,
       senderId: senderId,
     });
+
+    function calculateAverage(arr) {
+      var total = 0;
+      var count = 0;
+      arr.forEach(function (item, index) {
+        total += item;
+        count++;
+      });
+      return total / count;
+    }
     // WARN: REVIEWED
     if (reviewed) {
       await reviewed.updateOne({ room, senderId, review, comment, senderName });
@@ -47,15 +56,6 @@ export const reviewRoom = async (req, res) => {
         room: room,
       });
       const sum = roomReview.map((a) => a.review);
-      function calculateAverage(arr) {
-        var total = 0;
-        var count = 0;
-        arr.forEach(function (item, index) {
-          total += item;
-          count++;
-        });
-        return total / count;
-      }
       const mean = calculateAverage(sum);
       await Room.findOneAndUpdate(room, {
         review: mean,
@@ -79,15 +79,6 @@ export const reviewRoom = async (req, res) => {
       });
       const sum = roomReview.map((a) => a.review);
 
-      function calculateAverage(arr) {
-        var total = 0;
-        var count = 0;
-        arr.forEach(function (item, index) {
-          total += item;
-          count++;
-        });
-        return total / count;
-      }
       const mean = calculateAverage(sum);
       await Room.findByIdAndUpdate(room, {
         review: mean,
@@ -98,6 +89,7 @@ export const reviewRoom = async (req, res) => {
       res.status(200).json(result);
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
