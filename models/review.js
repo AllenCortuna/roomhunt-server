@@ -12,6 +12,8 @@ const expendSchema = mongoose.Schema({
     min: 1,
     max: 5,
   },
+  comment: String,
+  senderName: {type:String, required: true},
   updatedAt: { type: Date, default: new Date() },
 });
 

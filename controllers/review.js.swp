@@ -6,22 +6,9 @@ import Review from "../models/review.js";
 
 const router = express.Router();
 
-
-export const getReviews = async (req, res) => {
-  const {id} = req.params
-  try {
-    console.log(id)
-    const result = await Review.find({room: id})
-    res.status(200).json(result);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-    console.log(err)
-  }
-}
-
 export const reviewRoom = async (req, res) => {
   try {
-    const { room, senderId, review, comment, senderName } = req.body;
+    const { room, senderId, review } = req.body;
     if (!review) {
       return res.status(404).send("No Review");
     }
@@ -38,7 +25,7 @@ export const reviewRoom = async (req, res) => {
     });
     // WARN: REVIEWED
     if (reviewed) {
-      await reviewed.updateOne({ room, senderId, review, comment, senderName });
+      await reviewed.updateOne({ room, senderId, review });
       await reviewed.save();
       const total = await Review.countDocuments({
         room: room,
@@ -62,14 +49,13 @@ export const reviewRoom = async (req, res) => {
         total: total,
       });
       const result = await Room.findById(room);
+      console.log(result);
       res.status(200).json(result);
     } else {
       await new Review({
         room,
         senderId,
         review,
-        comment,
-        senderName,
       }).save();
       const total = await Review.countDocuments({
         room: room,
@@ -95,10 +81,11 @@ export const reviewRoom = async (req, res) => {
       });
 
       const result = await Room.findById(room);
+      console.log(result);
       res.status(200).json(result);
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(404).json({ message: error.message });
   }
 };
 
