@@ -14,6 +14,17 @@ export const getRooms = async (req, res) => {
   }
 };
 
+export const setRoomView = async (req, res) => {
+  const {id} = req.params
+  try {
+    const room = await Room.findById(id);
+    await room.update({view: this.room.view + 1})
+    res.status(200);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 export const uploadRoom = async (req, res) => {
   // const { price, name, checkInDate, checkOutDate, image } = req.body;
   const room = req.body;

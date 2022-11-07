@@ -8,7 +8,6 @@ const router = express.Router();
 
 export const getReviews = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const result = await Review.find({ room: id });
     res.status(200).json(result);
@@ -57,10 +56,11 @@ export const reviewRoom = async (req, res) => {
       });
       const sum = roomReview.map((a) => a.review);
       const mean = calculateAverage(sum);
-      await Room.findOneAndUpdate(room, {
+      const patch = await Room.findByIdAndUpdate(room, {
         review: mean,
         total: total,
       });
+      patch.save();
       const result = await Room.findById(room);
       res.status(200).json(result);
     } else {
@@ -80,10 +80,11 @@ export const reviewRoom = async (req, res) => {
       const sum = roomReview.map((a) => a.review);
 
       const mean = calculateAverage(sum);
-      await Room.findByIdAndUpdate(room, {
+      const patch = await Room.findByIdAndUpdate(room, {
         review: mean,
         total: total,
       });
+      patch.save();
 
       const result = await Room.findById(room);
       res.status(200).json(result);

@@ -7,6 +7,7 @@ import {
   getRoom,
   updateRoom,
   deleteRoom,
+  setRoomView
 } from "../controllers/room.js";
 import { reviewRoom, getReviews } from "../controllers/review.js";
 
@@ -17,12 +18,13 @@ const router = express.Router();
 
 router.get("/", getRooms);
 router.get("/search", getRoomBySearch);
-router.post("/", auth, uploadRoom);
-// router.post("/review", auth, reviewRoom);
 router.get("/review/:id", getReviews);
-router.post("/review", reviewRoom);
+router.patch("/view/:id", setRoomView);
 router.get("/own/:id", getOwnRooms);
 router.get("/:id", getRoom);
+router.post("/", auth, uploadRoom);
+// FIX: review  auth
+router.post("/review", reviewRoom);
 router.patch("/:id", auth, updateRoom);
 router.delete("/:id", auth, deleteRoom);
 

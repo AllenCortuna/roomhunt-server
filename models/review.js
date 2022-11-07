@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
 
 const expendSchema = mongoose.Schema({
-  room: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
+  room: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Room",
+    required: true,
+  },
   senderId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
@@ -13,7 +17,7 @@ const expendSchema = mongoose.Schema({
     max: 5,
   },
   comment: String,
-  senderName: {type:String, required: true},
+  senderName: { type: String, required: true },
   updatedAt: { type: Date, default: new Date() },
 });
 
