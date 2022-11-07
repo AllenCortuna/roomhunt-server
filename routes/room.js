@@ -7,7 +7,8 @@ import {
   getRoom,
   updateRoom,
   deleteRoom,
-  setRoomView
+  getRoomByLocation,
+  setRoomView,
 } from "../controllers/room.js";
 import { reviewRoom, getReviews } from "../controllers/review.js";
 
@@ -18,6 +19,7 @@ const router = express.Router();
 
 router.get("/", getRooms);
 router.get("/search", getRoomBySearch);
+router.get("/location", getRoomByLocation);
 router.get("/review/:id", getReviews);
 router.patch("/view/:id", setRoomView);
 router.get("/own/:id", getOwnRooms);

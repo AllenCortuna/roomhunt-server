@@ -15,10 +15,10 @@ export const getRooms = async (req, res) => {
 };
 
 export const setRoomView = async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params;
   try {
     const room = await Room.findById(id);
-    await room.update({view: this.room.view + 1})
+    await room.update({ view: this.room.view + 1 });
     res.status(200);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -55,7 +55,7 @@ export const updateRoom = async (req, res) => {
     const owner = await Accommodator.findById(req.userId);
 
     if (!mongoose.Types.ObjectId.isValid(id))
-      return res.status(404).send({message: `No room with id: ${id}`});
+      return res.status(404).send({ message: `No room with id: ${id}` });
 
     const updatedRoom = {
       _id: id,
@@ -77,6 +77,18 @@ export const updateRoom = async (req, res) => {
     res.json(updatedRoom);
   } catch (error) {
     res.status(404).json({ message: error.message });
+  }
+};
+export const getRoomByLocation = async (req, res) => {
+  const { location } = req.query;
+  try {
+    const loc = new RegExp(location, "i");
+    const rooms = await Room.find({
+      location: loc,
+    });
+    res.status(200).json(rooms);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -110,8 +122,8 @@ export const getRoomBySearch = async (req, res) => {
     });
     res.status(200).json(rooms);
   } catch (error) {
-    console.log(error.message)
-    res.status(404).json({ message: error.message });
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 

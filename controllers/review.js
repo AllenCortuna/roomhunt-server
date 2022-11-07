@@ -7,8 +7,8 @@ import Review from "../models/review.js";
 const router = express.Router();
 
 export const getReviews = async (req, res) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     const result = await Review.find({ room: id });
     res.status(200).json(result);
   } catch (err) {
