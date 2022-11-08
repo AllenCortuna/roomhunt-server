@@ -14,8 +14,8 @@ export const resetClientPassword = async (req, res) => {
   const { email, password } = req.body;
   try {
     const oldClient = await Client.findOne({ email });
-    if (oldClient)
-      return res.status(400).json({ message: "Client already exist" });
+    if (!oldClient)
+      return res.status(400).json({ message: "Email not found" });
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
@@ -76,6 +76,79 @@ export const resetClientPasswordOTP = async (req, res) => {
       expiresIn: "1d",
     });
     res.status(200).json({ result: client, token });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+
+export const resetAccPassword = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const oldClient = await Accommodator.findOne({ email });
+    if (!oldClient)
+      return res.status(400).json({ message: "Email not found" });
+
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      oldClient.password
+    );
+
+    if (isPasswordCorrect)
+      return res
+        .status(404)
+        .json({ message: "Password must not be the same as old password" });
+
+    // generate otp
+    const OTP = generateOTP();
+    const verificationToken = new VerificationToken({
+      owner: newAcc._id,
+      token: OTP,
+    });
+
+    await verificationToken.save();
+    const result = await newAcc.save();
+
+    mailTransport({ OTP, result });
+    res.status(201).json({ result });
+    console.log(OTP);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: `Something went wrong${error.message}` });
+  }
+};
+
+// Resey resetClientPasword
+export const resetAccPasswordOTP = async (req, res) => {
+  try {
+    const { otp, accId } = req.body;
+    console.log(accId);
+    console.log(otp);
+    //check if the valid params
+    if (!accId || !otp.trim())
+      return res.status(400).json({ message: "Invalid Request no parameters" });
+    // check if tama yung id
+    if (!mongoose.isValidObjectId(accId))
+      return res.status(404).json({ message: "Invalid Accommodator" });
+
+    const acc = await Client.findById(accId);
+    // kung meron yung account
+    if (!acc) return res.status(404).json({ message: "Account not Found" });
+    // kung verified na already
+    const verToken = await VerificationToken.findOne({ owner: acc._id });
+    if (!verToken) return res.status(404).json({ message: "Token not found" });
+    const isMatch = await verToken.compareToken(otp);
+    if (!isMatch) return res.status(500).json({ message: "OTP not match" });
+    acc.password = bcrypt.hash(password, 12);
+    await VerificationToken.findOneAndDelete(verToken._id);
+    await acc.save();
+
+    mailPassReset(acc.email);
+    const token = jwt.sign({ email: acc.email, id: acc._id }, SECRET, {
+      expiresIn: "1d",
+    });
+    res.status(200).json({ result: acc, token });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Something went wrong" });

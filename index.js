@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import accommodatorRoutes from "./routes/accommodator.js";
 import roomRoutes from "./routes/room.js";
 import clientRoutes from "./routes/client.js";
+import resetRoutes from "./routes/reset.js";
 const app = express();
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(cors());
 app.use("/accommodator", accommodatorRoutes);
 app.use("/client", clientRoutes);
 app.use("/room", roomRoutes);
+app.use("/reset", resetRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello to Room hunt API");
