@@ -10,6 +10,7 @@ import VerificationToken from "../models/verificationTokenAcc.js";
 import dotenv from "dotenv";
 dotenv.config();
 const SECRET = process.env.SECRET;
+const SALT = process.env.SALT;
 
 
 export const getAcc = async (req, res) => {
@@ -43,7 +44,7 @@ export const signup = async (req, res) => {
       return res.status(409).json({ message: "Account already exist" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, SALT);
     // save new accomodator
     const newAcc = new Accommodator({
       email,
