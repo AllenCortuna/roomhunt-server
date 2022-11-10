@@ -5,7 +5,7 @@ import VerificationToken from "../models/verificationTokenAcc.js";
 import mongoose from "mongoose";
 import Client from "../models/client.js";
 const SECRET = process.env.SECRET;
-// const SALT = process.env.SALT;
+const SALT = process.env.SALT;
 // import AccVerify from "../models/accVerify.js";
 
 import dotenv from "dotenv";
@@ -17,7 +17,7 @@ export const signup = async (req, res) => {
     if (oldClient){
       return res.status(409).json({ message: "Client already exist" })};
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, parseInt(SALT));
     const newAcc = new Client({
       name,
       email,
