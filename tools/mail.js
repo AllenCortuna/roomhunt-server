@@ -83,8 +83,8 @@ export const mailPassReset = (email) => {
     let mailDetails = {
       from: "olsencortuna@gmail.com",
       to: `${email}`,
-      subject: "OTP",
-      html: `<h1>Email Verified Successfully</h1>`,
+      subject: "Reset Ok",
+      html: `<h1>Email Password Reset Successfully</h1>`,
     };
 
     return mailTransporter.sendMail(mailDetails, function (err, data) {

@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import Client from "../models/client.js";
 import Accommodator from "../models/accommodator.js";
 const SECRET = process.env.SECRET;
+const SALT = process.env.SALT;
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -14,8 +15,7 @@ export const resetClientPassword = async (req, res) => {
   const { email, password } = req.body;
   try {
     const oldClient = await Client.findOne({ email });
-    if (!oldClient)
-      return res.status(400).json({ message: "Email not found" });
+    if (!oldClient) return res.status(400).json({ message: "Email not found" });
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
@@ -30,12 +30,12 @@ export const resetClientPassword = async (req, res) => {
     // generate otp
     const OTP = generateOTP();
     const verificationToken = new VerificationToken({
-      owner: newAcc._id,
+      owner: oldClient._id,
       token: OTP,
     });
 
     await verificationToken.save();
-    const result = await newAcc.save();
+    const result = await oldClient.save();
 
     mailTransport({ OTP, result });
     res.status(201).json({ result });
@@ -49,17 +49,18 @@ export const resetClientPassword = async (req, res) => {
 // Resey resetClientPasword
 export const resetClientPasswordOTP = async (req, res) => {
   try {
-    const { otp, clientId } = req.body;
-    console.log(clientId);
+    const { otp, password } = req.body;
+    const { id } = req.params;
+    console.log(id);
     console.log(otp);
     //check if the valid params
-    if (!clientId || !otp.trim())
+    if (!id || !otp.trim() || !password)
       return res.status(400).json({ message: "Invalid Request no parameters" });
     // check if tama yung id
-    if (!mongoose.isValidObjectId(clientId))
+    if (!mongoose.isValidObjectId(id))
       return res.status(404).json({ message: "Invalid Client" });
 
-    const client = await Client.findById(clientId);
+    const client = await Client.findById(id);
     // kung meron yung account
     if (!client) return res.status(404).json({ message: "Account not Found" });
     // kung verified na already
@@ -67,7 +68,7 @@ export const resetClientPasswordOTP = async (req, res) => {
     if (!verToken) return res.status(404).json({ message: "Token not found" });
     const isMatch = await verToken.compareToken(otp);
     if (!isMatch) return res.status(500).json({ message: "OTP not match" });
-    client.password = bcrypt.hash(password, 12);
+    client.password = bcrypt.hash(password, parseInt(SALT));
     await VerificationToken.findOneAndDelete(verToken._id);
     await client.save();
 
@@ -82,17 +83,15 @@ export const resetClientPasswordOTP = async (req, res) => {
   }
 };
 
-
 export const resetAccPassword = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const oldClient = await Accommodator.findOne({ email });
-    if (!oldClient)
-      return res.status(400).json({ message: "Email not found" });
+    const oldAcc = await Accommodator.findOne({ email });
+    if (!oldAcc) return res.status(400).json({ message: "Email not found" });
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
-      oldClient.password
+      oldAcc.password
     );
 
     if (isPasswordCorrect)
@@ -103,12 +102,12 @@ export const resetAccPassword = async (req, res) => {
     // generate otp
     const OTP = generateOTP();
     const verificationToken = new VerificationToken({
-      owner: newAcc._id,
+      owner: oldAcc._id,
       token: OTP,
     });
 
     await verificationToken.save();
-    const result = await newAcc.save();
+    const result = await oldAcc.save();
 
     mailTransport({ OTP, result });
     res.status(201).json({ result });
@@ -122,17 +121,18 @@ export const resetAccPassword = async (req, res) => {
 // Resey resetClientPasword
 export const resetAccPasswordOTP = async (req, res) => {
   try {
-    const { otp, accId } = req.body;
-    console.log(accId);
+    const { otp, password } = req.body;
+    const { id } = req.params;
     console.log(otp);
+    console.log(id);
     //check if the valid params
-    if (!accId || !otp.trim())
+    if (!id || !otp.trim())
       return res.status(400).json({ message: "Invalid Request no parameters" });
     // check if tama yung id
-    if (!mongoose.isValidObjectId(accId))
+    if (!mongoose.isValidObjectId(id))
       return res.status(404).json({ message: "Invalid Accommodator" });
 
-    const acc = await Client.findById(accId);
+    const acc = await Client.findById(id);
     // kung meron yung account
     if (!acc) return res.status(404).json({ message: "Account not Found" });
     // kung verified na already
@@ -140,7 +140,7 @@ export const resetAccPasswordOTP = async (req, res) => {
     if (!verToken) return res.status(404).json({ message: "Token not found" });
     const isMatch = await verToken.compareToken(otp);
     if (!isMatch) return res.status(500).json({ message: "OTP not match" });
-    acc.password = bcrypt.hash(password, 12);
+    acc.password = bcrypt.hash(password, parseInt(SALT));
     await VerificationToken.findOneAndDelete(verToken._id);
     await acc.save();
 
