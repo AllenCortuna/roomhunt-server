@@ -68,9 +68,10 @@ export const resetClientPasswordOTP = async (req, res) => {
     if (!verToken) return res.status(404).json({ message: "Token not found" });
     const isMatch = await verToken.compareToken(otp);
     if (!isMatch) return res.status(500).json({ message: "OTP not match" });
-    client.password = bcrypt.hash(password, parseInt(SALT));
-    await VerificationToken.findOneAndDelete(verToken._id);
+    const newPassword = await bcrypt.hash(password, parseInt(SALT));
+    client.password = newPassword;
     await client.save();
+    await VerificationToken.findOneAndDelete(verToken._id);
 
     mailPassReset(client.email);
     const token = jwt.sign({ email: client.email, id: client._id }, SECRET, {
@@ -89,10 +90,7 @@ export const resetAccPassword = async (req, res) => {
     const oldAcc = await Accommodator.findOne({ email });
     if (!oldAcc) return res.status(400).json({ message: "Email not found" });
 
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      oldAcc.password
-    );
+    const isPasswordCorrect = await bcrypt.compare(password, oldAcc.password);
 
     if (isPasswordCorrect)
       return res
@@ -126,13 +124,13 @@ export const resetAccPasswordOTP = async (req, res) => {
     console.log(otp);
     console.log(id);
     //check if the valid params
-    if (!id || !otp.trim())
+    if (!id || !otp.trim() || !password)
       return res.status(400).json({ message: "Invalid Request no parameters" });
     // check if tama yung id
     if (!mongoose.isValidObjectId(id))
       return res.status(404).json({ message: "Invalid Accommodator" });
 
-    const acc = await Client.findById(id);
+    const acc = await Accommodator.findById(id);
     // kung meron yung account
     if (!acc) return res.status(404).json({ message: "Account not Found" });
     // kung verified na already
@@ -140,7 +138,7 @@ export const resetAccPasswordOTP = async (req, res) => {
     if (!verToken) return res.status(404).json({ message: "Token not found" });
     const isMatch = await verToken.compareToken(otp);
     if (!isMatch) return res.status(500).json({ message: "OTP not match" });
-    acc.password = bcrypt.hash(password, parseInt(SALT));
+    acc.password = await bcrypt.hash(password, parseInt(SALT));
     await VerificationToken.findOneAndDelete(verToken._id);
     await acc.save();
 
