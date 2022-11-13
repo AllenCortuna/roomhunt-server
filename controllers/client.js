@@ -48,8 +48,6 @@ export const signup = async (req, res) => {
 export const verifyEmail = async (req, res) => {
   try {
     const { otp, clientId } = req.body;
-    console.log(clientId);
-    console.log(otp);
     //check if the valid params
     if (!clientId || !otp.trim())
       return res.status(400).json({ message: "Invalid Request no parameters" });

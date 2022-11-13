@@ -39,9 +39,7 @@ export const resetClientPassword = async (req, res) => {
 
     mailTransport({ OTP, result });
     res.status(201).json({ result });
-    console.log(OTP);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: `Something went wrong${error.message}` });
   }
 };
@@ -51,8 +49,6 @@ export const resetClientPasswordOTP = async (req, res) => {
   try {
     const { otp, password } = req.body;
     const { id } = req.params;
-    console.log(id);
-    console.log(otp);
     //check if the valid params
     if (!id || !otp.trim() || !password)
       return res.status(400).json({ message: "Invalid Request no parameters" });
@@ -79,7 +75,6 @@ export const resetClientPasswordOTP = async (req, res) => {
     });
     res.status(200).json({ result: client, token });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
@@ -109,30 +104,28 @@ export const resetAccPassword = async (req, res) => {
 
     mailTransport({ OTP, result });
     res.status(201).json({ result });
-    console.log(OTP);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: `Something went wrong${error.message}` });
   }
 };
 
-// Resey resetClientPasword
+// Reset resetAccPasword
 export const resetAccPasswordOTP = async (req, res) => {
   try {
     const { otp, password } = req.body;
     const { id } = req.params;
-    console.log(otp);
-    console.log(id);
     //check if the valid params
     if (!id || !otp.trim() || !password)
       return res.status(400).json({ message: "Invalid Request no parameters" });
     // check if tama yung id
-    if (!mongoose.isValidObjectId(id))
+    if (!mongoose.isValidObjectId(id)) {
       return res.status(404).json({ message: "Invalid Accommodator" });
+    }
 
     const acc = await Accommodator.findById(id);
     // kung meron yung account
-    if (!acc) return res.status(404).json({ message: "Account not Found" });
+    if (!acc){ return res.status(404).json({ message: "Account not Found" })};
     // kung verified na already
     const verToken = await VerificationToken.findOne({ owner: acc._id });
     if (!verToken) return res.status(404).json({ message: "Token not found" });
@@ -148,7 +141,6 @@ export const resetAccPasswordOTP = async (req, res) => {
     });
     res.status(200).json({ result: acc, token });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
