@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const expendSchema = mongoose.Schema({
+const messageSchema = mongoose.Schema({
   reciverId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -15,5 +15,5 @@ const expendSchema = mongoose.Schema({
   date: { type: Date, default: Date.now() },
 });
 
-var Room = mongoose.model("Room", expendSchema);
+var Room = mongoose.model("Message", messageSchema);
 export default Room;
