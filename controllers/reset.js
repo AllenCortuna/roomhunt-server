@@ -33,13 +33,13 @@ export const resetClientPassword = async (req, res) => {
       owner: oldClient._id,
       token: OTP,
     });
+    console.log(OTP);
 
     await verificationToken.save();
     const result = await oldClient.save();
 
     mailTransport({ OTP, result });
     res.status(201).json({ result });
-    console.log(OTP);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: `Something went wrong${error.message}` });
