@@ -9,11 +9,14 @@ const router = express.Router();
 export const getReviews = async (req, res) => {
   try {
     const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).send(`No room with id: ${id}`);
+    }
     const result = await Review.find({ room: id });
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ message: err.message });
-    console.log(err);
+    console.log(err.message);
   }
 };
 
