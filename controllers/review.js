@@ -12,6 +12,8 @@ export const getReviews = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).send(`No room with id: ${id}`);
     }
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return res.status(404).send(`No room with id: ${id}`);
     const result = await Review.find({ room: id });
     res.status(200).json(result);
   } catch (err) {

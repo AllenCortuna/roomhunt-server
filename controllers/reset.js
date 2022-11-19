@@ -33,6 +33,7 @@ export const resetClientPassword = async (req, res) => {
       owner: oldClient._id,
       token: OTP,
     });
+    console.log(OTP);
 
     await verificationToken.save();
     const result = await oldClient.save();
