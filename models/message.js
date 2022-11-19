@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const expendSchema = mongoose.Schema({
   reciverId: {
     type: mongoose.Schema.Types.ObjectId,
