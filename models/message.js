@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const messageSchema = mongoose.Schema({
-  reciverId: {
+  recieverId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },

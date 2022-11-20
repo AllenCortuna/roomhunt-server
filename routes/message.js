@@ -1,11 +1,12 @@
 import express from "express";
-import { getMessage, sendMessage } from "../controllers/message.js";
+import { deleteMessage, getRecieve, getSend, sendMessage } from "../controllers/message.js";
+// import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
-
-// WARNING: add auth for security
-
-router.get("/get", getMessage);
-router.post("/send", sendMessage);
+// warn: add auth for security
+router.get("/getRecieve/:id",  getRecieve);
+router.get("/getSend/:id",  getSend);
+router.delete("/delete/:id", deleteMessage);
+router.post("/send",  sendMessage);
 
 export default router;
