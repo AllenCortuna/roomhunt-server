@@ -15,5 +15,5 @@ const messageSchema = mongoose.Schema({
   date: { type: Date, default: Date.now() },
 });
 
-var Room = mongoose.model("Message", messageSchema);
-export default Room;
+var Message = mongoose.model("Message", messageSchema);
+export default Message;
