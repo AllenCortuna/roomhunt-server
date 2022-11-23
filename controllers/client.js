@@ -104,7 +104,6 @@ export const login = async (req, res) => {
       process.env.SECRET,
       { expiresIn: "1d" }
     );
-    console.log("login ok");
     res.status(200).json({ result: oldClient, token });
   } catch (err) {
     res.status(500).json({ message: "Something went wrong" });
