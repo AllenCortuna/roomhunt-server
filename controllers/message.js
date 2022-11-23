@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 export const sendMessage = async (req, res) => {
   try {
     const { message, senderId, recieverId, sender, reciever } = req.body;
-    console.log(message, senderId, recieverId);
     // check id
     if (!mongoose.Types.ObjectId.isValid(senderId))
       return res .status(404) .send({ message: `Not a valid senderId: ${senderId}` });
