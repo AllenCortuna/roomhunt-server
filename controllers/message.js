@@ -2,14 +2,12 @@ import Message from "../models/message.js";
 import mongoose from "mongoose";
 
 export const getRecieve = async (req, res) => {
-  console.log("getRecieve");
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(404).send({ message: `Not a valid Id: ${id}` });
     const result = await Message.find({ recieverId: id });
     res.status(201).json({ result });
-    console.log(result)
   } catch (err) {
     res.status(500).json({ message: `Something went wrong${err.message}` });
     console.log(err.message)
