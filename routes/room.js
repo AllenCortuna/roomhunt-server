@@ -25,8 +25,7 @@ router.patch("/view/:id", setRoomView);
 router.get("/own/:id", getOwnRooms);
 router.get("/:id", getRoom);
 router.post("/", auth, uploadRoom);
-// FIX: review  auth
-router.post("/review", reviewRoom);
+router.post("/review", auth, reviewRoom);
 router.patch("/:id", auth, updateRoom);
 router.delete("/:id", auth, deleteRoom);
 
