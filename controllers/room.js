@@ -57,8 +57,9 @@ export const updateRoom = async (req, res) => {
 
     const updatedRoom = {
       _id: id,
-      price,
+      ownerName: owner.businessName,
       name,
+      price,
       bed,
       image,
       category,
@@ -66,7 +67,6 @@ export const updateRoom = async (req, res) => {
       description,
       unavailableUntil,
       owner: req.userId,
-      ownerName: owner.businessName,
       updatedAt: new Date().toISOString(),
     };
 
