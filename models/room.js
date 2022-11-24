@@ -8,8 +8,8 @@ const expendSchema = mongoose.Schema({
   },
   ownerName: { type: String, required: true },
   category: { type: String, required: true },
+  description: { type: String, default: "None" },
   location: { type: String, required: true },
-  updatedAt: { type: Date, default: new Date() },
   name: { type: String, default: "None" },
   price: { type: Number, required: true },
   bed: { type: Number, required: true },
@@ -17,10 +17,9 @@ const expendSchema = mongoose.Schema({
   review: { type: Number, default: 0 },
   total: { type: Number, default: 0 },
   image: { type: String, required: true },
-  // date
-  checkInDate: { type: Date, default: null },
-  checkOutDate: { type: Date, default: null },
-  // aircon: { type: Boolean, required: true },
+  unavailableUntil: { type: Date, default: null },
+  updatedAt: { type: Date, default: new Date() },
+  // checkInDate: { type: Date, default: null },
 });
 
 var Room = mongoose.model("Room", expendSchema);

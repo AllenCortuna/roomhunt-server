@@ -34,8 +34,6 @@ export const uploadRoom = async (req, res) => {
     owner: req.userId,
     updatedAt: new Date(),
     ownerName: owner.businessName,
-    category: owner.category,
-    location: owner.location,
     updatedAt: new Date().toISOString(),
   });
 
@@ -51,7 +49,7 @@ export const updateRoom = async (req, res) => {
   try {
     const { id } = req.params;
     // const  room  = req.body;
-    const { price, name, bed, checkInDate, checkOutDate, image } = req.body;
+    const { price, name, bed, description, category, image,location } = req.body;
     const owner = await Accommodator.findById(req.userId);
 
     if (!mongoose.Types.ObjectId.isValid(id))
@@ -62,13 +60,13 @@ export const updateRoom = async (req, res) => {
       price,
       name,
       bed,
-      checkInDate,
-      checkOutDate,
       image,
+      category,
+      location,
+      description,
+      unavailableUntil,
       owner: req.userId,
       ownerName: owner.businessName,
-      category: owner.category,
-      location: owner.location,
       updatedAt: new Date().toISOString(),
     };
 
