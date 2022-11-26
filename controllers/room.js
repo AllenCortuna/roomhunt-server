@@ -28,7 +28,7 @@ export const setRoomView = async (req, res) => {
 export const uploadRoom = async (req, res) => {
   // const { price, name, checkInDate, checkOutDate, image } = req.body;
   const room = req.body;
-  console.log(room.unavailableUntil,room.category)
+  console.log(room.unavailableUntil, room.category);
   const owner = await Accommodator.findById(req.userId);
   const newRoomPost = new Room({
     ...room,
@@ -49,7 +49,8 @@ export const updateRoom = async (req, res) => {
   try {
     const { id } = req.params;
     // const  room  = req.body;
-    const { price, name, bed, description, category, image,location } = req.body;
+    const { price, name, bed, description, category, image, location } =
+      req.body;
     const owner = await Accommodator.findById(req.userId);
 
     if (!mongoose.Types.ObjectId.isValid(id))
@@ -98,18 +99,20 @@ export const getRoomBySearch = async (req, res) => {
     location,
     bed,
     checkInDate,
-    checkOutDate,
+    // checkOutDate,
     minPrice,
     maxPrice,
   } = req.query;
   try {
     const loc = new RegExp(location, "i");
+    const cat = new RegExp(category, "i");
+    const count = new RegExp(bed, "i");
     const rooms = await Room.find({
       location: loc,
-      category: category,
-      bed: bed,
+      category: cat,
+      bed: count,
       price: { $gte: minPrice, $lte: maxPrice },
-      unavailableUntil: {$lt: checkInDate, $lt:checkOutDate},
+      unavailableUntil: {$lt: checkInDate}
     });
     res.status(200).json(rooms);
   } catch (error) {

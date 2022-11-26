@@ -12,7 +12,7 @@ const expendSchema = mongoose.Schema({
   location: { type: String, required: true },
   name: { type: String, default: "None" },
   price: { type: Number, required: true },
-  bed: { type: Number, required: true },
+  bed: { type: String, required: true },
   view: { type: Number, default: 0 },
   review: { type: Number, default: 0 },
   total: { type: Number, default: 0 },
