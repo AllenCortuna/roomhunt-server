@@ -28,7 +28,6 @@ export const setRoomView = async (req, res) => {
 export const uploadRoom = async (req, res) => {
   // const { price, name, checkInDate, checkOutDate, image } = req.body;
   const room = req.body;
-  console.log(room.unavailableUntil,room.category)
   const owner = await Accommodator.findById(req.userId);
   const newRoomPost = new Room({
     ...room,
@@ -109,7 +108,16 @@ export const getRoomBySearch = async (req, res) => {
       category: category,
       bed: bed,
       price: { $gte: minPrice, $lte: maxPrice },
-      unavailableUntil: {$lt: checkInDate, $lt:checkOutDate},
+      $or: [
+        {
+          checkInDate: { $gte: checkInDate, $gte: checkOutDate },
+          checkOutDate: { $gte: checkInDate, $gte: checkOutDate },
+        },
+        {
+          checkInDate: { $lte: checkInDate, $lte: checkOutDate },
+          checkOutDate: { $lte: checkInDate, $lte: checkOutDate },
+        },
+      ],
     });
     res.status(200).json(rooms);
   } catch (error) {
