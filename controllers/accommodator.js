@@ -1,6 +1,6 @@
+// import nodemailer from 'nodemailer'
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-// import nodemailer from 'nodemailer'
 import { generateOTP, mailTransport, mailVerified } from "../tools/mail.js";
 import mongoose from "mongoose";
 import Accommodator from "../models/accommodator.js";
@@ -12,11 +12,10 @@ dotenv.config();
 const SECRET = process.env.SECRET;
 const SALT = process.env.SALT;
 
-
 export const getAcc = async (req, res) => {
   try {
-    const { id } = req.params
-    const acc = await Accommodator.findById(id)
+    const { id } = req.params;
+    const acc = await Accommodator.findById(id);
     if (!acc) {
       return res.status(404).json({ message: "Accommodator does not exist" });
     }
@@ -24,7 +23,35 @@ export const getAcc = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: `Something went wrong${error.message}` });
   }
-}
+};
+
+export const updateAcc = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { businessName, owner, location, contact, image } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(senderId))
+      return res
+        .status(404)
+        .send({ message: `Not a valid senderId: ${senderId}` });
+    const acc = await Accommodator.findByIdAndUpdate(
+      id,
+      {
+        businessName,
+        owner,
+        location,
+        contact,
+        image,
+      },
+      { new: true }
+    );
+    if (!acc) {
+      return res.status(404).json({ message: "Accommodator does not exist" });
+    }
+    res.status(200).json(acc);
+  } catch (error) {
+    res.status(500).json({ message: `Something went wrong${error.message}` });
+  }
+};
 
 export const signup = async (req, res) => {
   const {
@@ -116,9 +143,8 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    
     const oldAccommodator = await Accommodator.findOne({ email });
-    
+
     if (!oldAccommodator) {
       return res.status(401).json({ message: "Account does not exist" });
     }
@@ -128,10 +154,9 @@ export const login = async (req, res) => {
       oldAccommodator.password
     );
 
-    
     if (!isPasswordCorrect) {
-      return res.status(401).json({ message: "Invalid password" })
-    };
+      return res.status(401).json({ message: "Invalid password" });
+    }
 
     const token = jwt.sign(
       { email: oldAccommodator.email, id: oldAccommodator._id },
