@@ -24,7 +24,7 @@ const auth = async (req, res, next) => {
 
     next();
   } catch (err) {
-    console.log("Token Err:",err.message);
+    console.log("Token Err Auth:",err.message);
   }
 };
 
