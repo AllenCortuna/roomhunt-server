@@ -25,31 +25,34 @@ export const getAcc = async (req, res) => {
   }
 };
 
-export const updateAcc = async (req, res) => {
+export const patchAcc = async (req, res) => {
   try {
     const { id } = req.params;
-    const { businessName, owner, location, contact, image } = req.body;
-    if (!mongoose.Types.ObjectId.isValid(senderId))
+    const { businessName, ownerName, location, contact,email, image, category } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(id))
       return res
         .status(404)
-        .send({ message: `Not a valid senderId: ${senderId}` });
+        .send({ message: `Not a valid Id: ${id}` });
     const acc = await Accommodator.findByIdAndUpdate(
       id,
       {
         businessName,
-        owner,
+        ownerName,
         location,
+        email,  
         contact,
         image,
+        category
       },
       { new: true }
     );
-    if (!acc) {
-      return res.status(404).json({ message: "Accommodator does not exist" });
-    }
-    res.status(200).json(acc);
-  } catch (error) {
-    res.status(500).json({ message: `Something went wrong${error.message}` });
+    const token = jwt.sign({ email: acc.email, id: acc._id }, SECRET, {
+      expiresIn: "1d",
+    });
+    res.status(200).json({ result: acc, token });
+  } catch (err) {
+    res.status(500).json({ message: `Something went wrong${err.message}` });
+    console.log(err.message)
   }
 };
 
