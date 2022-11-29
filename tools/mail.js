@@ -24,8 +24,8 @@ export const mailTransport = ({OTP, result}) => {
     let mailTransporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "olsencortuna@gmail.com",
-        pass: "yeopsbeprvyefdvt",
+        user: "2022roomhunt@gmail.com",
+        pass: "ylxygweqkfbucacm",
       },
     });
 
@@ -50,13 +50,13 @@ export const mailVerified = (email) => {
     let mailTransporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "olsencortuna@gmail.com",
-        pass: "yeopsbeprvyefdvt",
+        user: "2022roomhunt@gmail.com",
+        pass: "ylxygweqkfbucacm",
       },
     });
 
     let mailDetails = {
-      from: "olsencortuna@gmail.com",
+      from: "2022roomhunt@gmail.com",
       to: `${email}`,
       subject: "OTP",
       html: `<h1>Email Verified Successfully</h1>`,
@@ -75,13 +75,13 @@ export const mailPassReset = (email) => {
     let mailTransporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "olsencortuna@gmail.com",
-        pass: "yeopsbeprvyefdvt",
+        user: "2022roomhunt@gmail.com",
+        pass: "ylxygweqkfbucacm",
       },
     });
 
     let mailDetails = {
-      from: "olsencortuna@gmail.com",
+      from: "2022roomhunt@gmail.com",
       to: `${email}`,
       subject: "Reset Ok",
       html: `<h1>Email Password Reset Successfully</h1>`,
