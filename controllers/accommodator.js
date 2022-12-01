@@ -120,7 +120,7 @@ export const verifyEmail = async (req, res) => {
     // kung meron yung account ng accommodator sa database
     if (!acc) return res.status(404).json({ message: "Account not Found" });
     // kung verified na already
-    if (acc.verified)
+    if (acc.verifiedEmail)
       return res.status(403).json({ message: "Account already verified" });
     const verToken = await VerificationToken.findOne({ owner: acc._id });
     if (!verToken) return res.status(404).json({ message: "Token not found" });

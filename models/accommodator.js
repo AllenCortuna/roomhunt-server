@@ -13,7 +13,8 @@ const accommodatorSchema = mongoose.Schema({
   review: [{ type: Number, }],
   image: { type: String, required: true },
   fetured: Boolean,
-  verified: { type: Boolean, default: false, required: true },
+  // verified: { type: Boolean, default: false, required: true },
+  verified: { type: Boolean, default: true, required: true },
   verifiedEmail: { type: Boolean, default: false, required: true },
 });
 
