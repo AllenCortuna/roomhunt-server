@@ -8,7 +8,7 @@ import {
   updateRoom,
   deleteRoom,
   getRoomByLocation,
-  setRoomView,
+  updateView,
 } from "../controllers/room.js";
 import { reviewRoom, getReviews } from "../controllers/review.js";
 
@@ -21,7 +21,7 @@ router.get("/", getRooms);
 router.get("/search", getRoomBySearch);
 router.get("/location", getRoomByLocation);
 router.get("/review/:id", getReviews);
-router.patch("/view/:id", setRoomView);
+router.patch("/view/:id", updateView);
 router.get("/own/:id", getOwnRooms);
 router.get("/:id", getRoom);
 router.post("/", auth, uploadRoom);
