@@ -120,7 +120,7 @@ export const getRoomBySearch = async (req, res) => {
       category: cat,
       bed: count,
       price: { $gte: minPrice, $lte: maxPrice },
-      unavailableUntil: { $lt: checkInDate },
+      $or:[{unavailableUntil: { $lt: checkInDate }},{unavailableUntil: null}],
     });
     res.status(200).json(rooms);
   } catch (error) {
