@@ -102,25 +102,27 @@ export const getRoomByLocation = async (req, res) => {
 };
 
 export const getRoomBySearch = async (req, res) => {
-  const {
-    category,
-    location,
-    bed,
-    checkInDate,
-    // checkOutDate,
-    minPrice,
-    maxPrice,
-  } = req.query;
+  const { category, location, bed, checkInDate, minPrice, maxPrice } =
+    req.query;
   try {
     const loc = new RegExp(location, "i");
     const cat = new RegExp(category, "i");
     const count = new RegExp(bed, "i");
+
+    const min_Price = minPrice ? minPrice : 0;
+    const max_Price = maxPrice ? maxPrice : 100000000;
+    const check_InDate = checkInDate
+      ? checkInDate
+      : new Date().setFullYear(2030);
     const rooms = await Room.find({
       location: loc,
       category: cat,
       bed: count,
-      price: { $gte: minPrice, $lte: maxPrice },
-      $or:[{unavailableUntil: { $lt: checkInDate }},{unavailableUntil: null}],
+      price: { $gte: min_Price, $lte: max_Price },
+      $or: [
+        { unavailableUntil: { $lt: check_InDate } },
+        { unavailableUntil: null },
+      ],
     });
     res.status(200).json(rooms);
   } catch (error) {

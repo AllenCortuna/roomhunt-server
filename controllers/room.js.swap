@@ -14,19 +14,20 @@ export const getRooms = async (req, res) => {
   }
 };
 
-export const setRoomView = async (req, res) => {
+export const updateView = async (req, res) => {
   const { id } = req.params;
   try {
     const room = await Room.findById(id);
-    await room.update({ view: this.room.view + 1 });
+    const view = room.view + 1;
+    await Room.findByIdAndUpdate(id, { view: view }, { new: true });
     res.status(200);
   } catch (error) {
+    console.log(error);
     res.status(404).json({ message: error.message });
   }
 };
 
 export const uploadRoom = async (req, res) => {
-  // const { price, name, checkInDate, checkOutDate, image } = req.body;
   const room = req.body;
   const owner = await Accommodator.findById(req.userId);
   const newRoomPost = new Room({
@@ -48,7 +49,16 @@ export const updateRoom = async (req, res) => {
   try {
     const { id } = req.params;
     // const  room  = req.body;
-    const { price, name, bed, description, category, image,location } = req.body;
+    const {
+      price,
+      name,
+      bed,
+      description,
+      category,
+      image,
+      location,
+      unavailableUntil,
+    } = req.body;
     const owner = await Accommodator.findById(req.userId);
 
     if (!mongoose.Types.ObjectId.isValid(id))
@@ -92,34 +102,86 @@ export const getRoomByLocation = async (req, res) => {
 };
 
 export const getRoomBySearch = async (req, res) => {
-  const {
-    category,
-    location,
-    bed,
-    checkInDate,
-    checkOutDate,
-    minPrice,
-    maxPrice,
-  } = req.query;
+  const { category, location, bed, checkInDate, minPrice, maxPrice } =
+    req.query;
+ console.log(checkInDate,"price", minPrice, maxPrice) 
   try {
     const loc = new RegExp(location, "i");
-    const rooms = await Room.find({
-      location: loc,
-      category: category,
-      bed: bed,
-      price: { $gte: minPrice, $lte: maxPrice },
-      $or: [
-        {
-          checkInDate: { $gte: checkInDate, $gte: checkOutDate },
-          checkOutDate: { $gte: checkInDate, $gte: checkOutDate },
-        },
-        {
-          checkInDate: { $lte: checkInDate, $lte: checkOutDate },
-          checkOutDate: { $lte: checkInDate, $lte: checkOutDate },
-        },
-      ],
-    });
-    res.status(200).json(rooms);
+    const cat = new RegExp(category, "i");
+    const count = new RegExp(bed, "i");
+    if (!minPrice && !maxPrice && checkInDate) {
+      const rooms = await Room.find({
+        location: loc,
+        category: cat,
+        bed: count,
+        $or: [
+          { unavailableUntil: { $lt: checkInDate } },
+          { unavailableUntil: null },
+        ],
+      });
+      return res.status(200).json(rooms);
+    } else if (!checkInDate && minPrice !== NaN && maxPrice!==NaN) {
+     console.log("search") 
+      const rooms = await Room.find({
+        location: loc,
+        category: cat,
+        bed: count,
+        price: { $gte: minPrice, $lte: maxPrice },
+      });
+      return res.status(200).json(rooms);
+    } else if (!checkInDate && ! minPrice && checkInDate) {
+      const rooms = await Room.find({
+        location: loc,
+        category: cat,
+        bed: count,
+        price: { $lte: maxPrice },
+      });
+      return res.status(200).json(rooms);
+    } else if (!checkInDate && ! maxPrice && minPrice) {
+      const rooms = await Room.find({
+        location: loc,
+        category: cat,
+        bed: count,
+        price: { $gte: minPrice },
+      });
+      return res.status(200).json(rooms);
+    } else if (!minPrice && maxPrice && checkInDate) {
+      const rooms = await Room.find({
+        location: loc,
+        category: cat,
+        bed: count,
+        price: { $lte: maxPrice },
+        $or: [
+          { unavailableUntil: { $lt: checkInDate } },
+          { unavailableUntil: null },
+        ],
+      });
+      return res.status(200).json(rooms);
+    } else if (!maxPrice && minPrice && checkInDate) {
+      const rooms = await Room.find({
+        location: loc,
+        category: cat,
+        bed: count,
+        price: { $gte: minPrice },
+        $or: [
+          { unavailableUntil: { $lt: checkInDate } },
+          { unavailableUntil: null },
+        ],
+      });
+      return res.status(200).json(rooms);
+    } else {
+      const rooms = await Room.find({
+        location: loc,
+        category: cat,
+        bed: count,
+        price: { $gte: minPrice, $lte: maxPrice },
+        $or: [
+          { unavailableUntil: { $lt: checkInDate } },
+          { unavailableUntil: null },
+        ],
+      });
+      return res.status(200).json(rooms);
+    }
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ message: error.message });
