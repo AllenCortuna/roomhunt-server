@@ -16,7 +16,7 @@ const expendSchema = mongoose.Schema({
   view: { type: Number, default: 0 },
   review: { type: Number, default: 0 },
   total: { type: Number, default: 0 },
-  image: { type: String, required: true },
+  image: { type: [String], required: true },
   unavailableUntil: { type: Date, default: null },
   updatedAt: { type: Date, default: new Date() },
   // checkInDate: { type: Date, default: null },
