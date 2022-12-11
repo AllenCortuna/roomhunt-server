@@ -15,6 +15,7 @@ const expendSchema = mongoose.Schema({
   bed: { type: String, required: true },
   view: { type: Number, default: 0 },
   review: { type: Number, default: 0 },
+  featured: { type: Boolean, default: false },
   total: { type: Number, default: 0 },
   image: { type: [String], required: true },
   unavailableUntil: { type: Date, default: null },

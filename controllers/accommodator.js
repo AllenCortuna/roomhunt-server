@@ -24,6 +24,16 @@ export const getAcc = async (req, res) => {
     res.status(500).json({ message: `Something went wrong${error.message}` });
   }
 };
+export const getFeaturedAcc = async (req, res) => {
+  try {
+    const acc = await Accommodator.find({featured: true});
+    res.status(200).json(acc);
+  } catch (error) {
+    res.status(500).json({ message: `Something went wrong${error.message}` });
+  }
+};
+
+
 
 export const patchAcc = async (req, res) => {
   try {

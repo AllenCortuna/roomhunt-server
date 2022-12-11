@@ -9,6 +9,7 @@ import {
   deleteRoom,
   getRoomByLocation,
   updateView,
+  // getFeaturedRooms,
 } from "../controllers/room.js";
 import { reviewRoom, getReviews } from "../controllers/review.js";
 
@@ -18,6 +19,7 @@ const router = express.Router();
 // WARNING: add auth for security
 
 router.get("/", getRooms);
+// router.get("/getFeatured", getFeaturedRooms);
 router.get("/search", getRoomBySearch);
 router.get("/location", getRoomByLocation);
 router.get("/review/:id", getReviews);
