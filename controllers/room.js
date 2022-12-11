@@ -16,7 +16,7 @@ export const getRooms = async (req, res) => {
 
 export const getFeaturedRooms = async (req, res) => {
   try {
-    const rooms = await Room.find({featured:true});
+    const rooms = await Room.find({ featured: true });
     res.status(200).json(rooms);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -142,10 +142,12 @@ export const getRoomBySearch = async (req, res) => {
 
 export const getOwnRooms = async (req, res) => {
   const { id } = req.params;
+  console.log(id);
   try {
     const rooms = await Room.find({ owner: id });
     res.status(200).json(rooms);
   } catch (error) {
+    console.log(error.message);
     res.status(404).json({ message: error.message });
   }
 };
