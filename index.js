@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import roomRoutes from "./routes/room.js";
+import adminRoutes from "./routes/admin.js";
 import clientRoutes from "./routes/client.js";
 import resetRoutes from "./routes/reset.js";
 import messageRoutes from "./routes/message.js";
@@ -19,6 +20,7 @@ app.use("/accommodator", accommodatorRoutes);
 app.use("/client", clientRoutes);
 app.use("/room", roomRoutes);
 app.use("/reset", resetRoutes);
+app.use("/admin", adminRoutes);
 app.use("/message", messageRoutes);
 
 app.get("/", (req, res) => {
