@@ -6,7 +6,7 @@ const clientSchema = mongoose.Schema({
   password: { type: String, required: true },
   birthday: { type: Date, required: true },
   verifiedEmail: { type: Boolean, default: false },
-  verified: { type: Boolean, default: false },
+  verified: { type: Boolean, default: true },
   expireAt: { type: Date, default: Date.now, expires: 300 },
 });
 
