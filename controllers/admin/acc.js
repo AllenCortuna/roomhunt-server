@@ -3,15 +3,14 @@ import Accommodator from "../../models/accommodator.js";
 export const getAccs = async (req, res) => {
   try {
     const { query, verified } = req.query;
-    console.log(verified, query);
-
     const que = new RegExp(query, "i");
     const result = await Accommodator.find({
-      $or: [{ email: que }],
+      $or: [{ email: que }, { location: que }, { owner: que }],
       verified,
-    }).sort({ _id: -1 });
+    })
+      .select("businessName verified owner location email")
+      .sort({ _id: "desc" });
     res.status(200).json(result);
-    // .project({ email: 1, location: 1, owner: 1, businessName: 1 });
   } catch (err) {
     console.log(err.message);
   }
@@ -20,11 +19,13 @@ export const getAccs = async (req, res) => {
 export const verifyAcc = async (req, res) => {
   try {
     const { id } = req.params;
+    const { verified } = req.body;
+   console.log(verified) 
     const result = await Accommodator.findByIdAndUpdate(
       id,
-      { verified: true },
+      { verified },
       { new: true }
-    );
+    ).select("businessName verified owner location email");
     res.status(200).json(result);
   } catch (err) {
     console.log(err.message);

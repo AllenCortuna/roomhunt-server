@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post("/login", login);
 router.get("/getAccs", getAccs)
-router.patch("/verify", verifyAcc)
+router.patch("/verifyAcc/:id", verifyAcc)
 
 
 

@@ -119,7 +119,7 @@ export const getRoomBySearch = async (req, res) => {
     const count = new RegExp(bed, "i");
 
     const min_Price = minPrice ? minPrice : 0;
-    const max_Price = maxPrice ? maxPrice : 100000000;
+    const max_Price = maxPrice ? maxPrice : 10000;
     const check_InDate = checkInDate
       ? checkInDate
       : new Date().setFullYear(2030);
