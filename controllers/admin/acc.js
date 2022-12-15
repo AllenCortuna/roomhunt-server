@@ -9,7 +9,7 @@ export const getAccs = async (req, res) => {
       verified,
     })
       .select("businessName verified owner location email")
-      .sort({ _id: "desc" });
+      .sort({ _id: "desc" }).limit(20);
     res.status(200).json(result);
   } catch (err) {
     console.log(err.message);
