@@ -42,8 +42,8 @@ export const subcribe = async (req, res) => {
     }
     const date = new Date();
     let day = date.getDate();
-    let month = date.getMonth() + 1 > 12 ? 1 : date.getMonth() + 1;
-    let year = date.getMonth() + 1 > 12 ? date.getFullYear() : date.getFullYear() + 1;
+    let month = date.getMonth() + 2 > 12 ? 1 : date.getMonth() + 1;
+    let year = date.getMonth() + 2 > 12 ? date.getFullYear() : date.getFullYear() + 1;
 
     const now = new Date(`${year}-${month}-${day}`);
     const result = await Accommodator.findByIdAndUpdate(
