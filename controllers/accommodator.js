@@ -153,10 +153,8 @@ export const verifyEmail = async (req, res) => {
 // LOGIN
 export const login = async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const oldAccommodator = await Accommodator.findOne({ email });
-
     if (!oldAccommodator) {
       return res.status(401).json({ message: "Account does not exist" });
     }

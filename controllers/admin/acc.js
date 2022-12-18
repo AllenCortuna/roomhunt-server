@@ -18,16 +18,25 @@ export const getAccs = async (req, res) => {
   }
 };
 
+export const getAcc = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await Accommodator.findById(id);
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 export const verifyAcc = async (req, res) => {
   try {
     const { id } = req.params;
     const { verified } = req.body;
-    console.log(verified);
     const result = await Accommodator.findByIdAndUpdate(
       id,
       { verified },
       { new: true }
-    ).select("businessName verified owner location email");
+    )//.select("businessName verified owner location email");
     res.status(200).json(result);
   } catch (err) {
     console.log(err.message);
@@ -43,7 +52,8 @@ export const subcribe = async (req, res) => {
     const date = new Date();
     let day = date.getDate();
     let month = date.getMonth() + 2 > 12 ? 1 : date.getMonth() + 1;
-    let year = date.getMonth() + 2 > 12 ? date.getFullYear() : date.getFullYear() + 1;
+    let year =
+      date.getMonth() + 2 > 12 ? date.getFullYear() + 1 : date.getFullYear();
 
     const now = new Date(`${year}-${month}-${day}`);
     const result = await Accommodator.findByIdAndUpdate(
@@ -52,6 +62,7 @@ export const subcribe = async (req, res) => {
       { new: true }
     );
     res.status(200).json(result);
+   console.log("subcribe") 
   } catch (err) {
     console.log(err.message);
   }
