@@ -5,7 +5,6 @@ import { generateOTP, mailTransport, mailVerified } from "../tools/mail.js";
 import mongoose from "mongoose";
 import Accommodator from "../models/accommodator.js";
 import VerificationToken from "../models/verificationTokenAcc.js";
-// import AccVerify from "../models/accVerify.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -24,6 +23,7 @@ export const getAcc = async (req, res) => {
     res.status(500).json({ message: `Something went wrong${error.message}` });
   }
 };
+
 export const getFeaturedAcc = async (req, res) => {
   try {
     const acc = await Accommodator.find({featured: true});
@@ -108,7 +108,7 @@ export const signup = async (req, res) => {
     const result = await newAcc.save();
 
     mailTransport({ OTP, result });
-    res.status(201).json({ result });
+    res.status(200).json({ result });
   } catch (error) {
     res.status(500).json({ message: `Something went wrong${error.message}` });
   }
