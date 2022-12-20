@@ -1,4 +1,6 @@
+import Room from "../../models/room.js";
 import Accommodator from "../../models/accommodator.js";
+
 import mongoose from "mongoose";
 
 export const getAccs = async (req, res) => {
@@ -28,6 +30,17 @@ export const getAcc = async (req, res) => {
   }
 };
 
+export const deleteAcc = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Room.deleteMany({ owner: id });
+    await Accommodator.findByIdAndDelete(id);
+    res.json({ message: "Accommodator deleted successfully." });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 export const verifyAcc = async (req, res) => {
   try {
     const { id } = req.params;
@@ -36,7 +49,7 @@ export const verifyAcc = async (req, res) => {
       id,
       { verified },
       { new: true }
-    )//.select("businessName verified owner location email");
+    ); //.select("businessName verified owner location email");
     res.status(200).json(result);
   } catch (err) {
     console.log(err.message);
@@ -62,7 +75,7 @@ export const subcribe = async (req, res) => {
       { new: true }
     );
     res.status(200).json(result);
-   console.log("subcribe") 
+    console.log("subcribe");
   } catch (err) {
     console.log(err.message);
   }
