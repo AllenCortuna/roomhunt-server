@@ -23,7 +23,7 @@ export const getAccs = async (req, res) => {
 export const getAcc = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await Accommodator.findById(id);
+    const result = await Accommodator.findById(id).select("businessName verified owner location email");;
     res.status(200).json(result);
   } catch (err) {
     console.log(err.message);
@@ -73,9 +73,9 @@ export const subcribe = async (req, res) => {
       id,
       { subcribeTil: now },
       { new: true }
-    );
+    ).select("businessName verified owner location email");
+    await result.save()
     res.status(200).json(result);
-    console.log("subcribe");
   } catch (err) {
     console.log(err.message);
   }
