@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
-
 const date = new Date();
 let day = date.getDate();
-let month = date.getMonth() + 1;
-let year = date.getFullYear();
+// let month = date.getMonth() + 1;
+// let year = date.getFullYear();
+
+let month = date.getMonth() + 2 > 12 ? 1 : date.getMonth() + 1;
+let year =
+  date.getMonth() + 2 > 12 ? date.getFullYear() + 1 : date.getFullYear();
 
 const now = new Date(`${year}-${month}-${day}`);
 
