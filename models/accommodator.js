@@ -23,7 +23,7 @@ const accommodatorSchema = mongoose.Schema({
   image: { type: String, required: true },
   featured: { type: Boolean, default: false },
   subcribeTil: { type: Date, default: now, required: true },
-  verified: { type: Boolean, default: true, required: true },
+  verified: { type: Boolean, default: false, required: true },
   verifiedEmail: { type: Boolean, default: false, required: true },
 });
 
