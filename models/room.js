@@ -13,10 +13,10 @@ const expendSchema = mongoose.Schema({
   name: { type: String, default: "None" },
   price: { type: Number, required: true },
   bed: { type: String, required: true },
-  view: { type: Number, default: 0 },
-  review: { type: Number, default: 0 },
-  featured: { type: Boolean, default: false },
+  view: { type: Number, default: 0 },// total room view 
+  review: { type: Number, default: 0 }, // total review 
   total: { type: Number, default: 0 },
+  featured: { type: Boolean, default: false },
   image: { type: [String], required: true },
   unavailableUntil: { type: Date, default: null },
   updatedAt: { type: Date, default: new Date() },

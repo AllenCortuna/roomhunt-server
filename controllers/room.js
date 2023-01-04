@@ -7,7 +7,7 @@ const router = express.Router();
 
 export const getRooms = async (req, res) => {
   try {
-    const rooms = await Room.find().slice("image", 1);
+    const rooms = await Room.find().slice("image", 1).sort();
     res.status(200).json(rooms);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -57,7 +57,6 @@ export const uploadRoom = async (req, res) => {
 export const updateRoom = async (req, res) => {
   try {
     const { id } = req.params;
-    // const  room  = req.body;
     const {
       price,
       name,
@@ -115,6 +114,7 @@ export const getRoomByLocation = async (req, res) => {
 export const getRoomBySearch = async (req, res) => {
   const { category, location, bed, checkInDate, minPrice, maxPrice } =
     req.query;
+  console.log("cat", category);
   try {
     const loc = new RegExp(location, "i");
     const cat = new RegExp(category, "i");
@@ -134,7 +134,12 @@ export const getRoomBySearch = async (req, res) => {
         { unavailableUntil: { $lt: check_InDate } },
         { unavailableUntil: null },
       ],
-    }).slice("image", 1);
+    })
+      .select(
+        "owner location category bed price unavailableUntil description review total image "
+      )
+      .sort("-review")
+      .slice("image", 1);
 
     res.status(200).json(rooms);
   } catch (error) {
