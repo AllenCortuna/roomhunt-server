@@ -26,33 +26,37 @@ export const getAcc = async (req, res) => {
 
 export const getFeaturedAcc = async (req, res) => {
   try {
-    const acc = await Accommodator.find({featured: true});
+    const acc = await Accommodator.find({ featured: true });
     res.status(200).json(acc);
   } catch (error) {
     res.status(500).json({ message: `Something went wrong${error.message}` });
   }
 };
 
-
-
 export const patchAcc = async (req, res) => {
   try {
     const { id } = req.params;
-    const { businessName, ownerName, location, contact,email, image, category } = req.body;
+    const {
+      businessName,
+      ownerName,
+      location,
+      contact,
+      email,
+      image,
+      category,
+    } = req.body;
     if (!mongoose.Types.ObjectId.isValid(id))
-      return res
-        .status(404)
-        .send({ message: `Not a valid Id: ${id}` });
+      return res.status(404).send({ message: `Not a valid Id: ${id}` });
     const acc = await Accommodator.findByIdAndUpdate(
       id,
       {
         businessName,
         ownerName,
         location,
-        email,  
+        email,
         contact,
         image,
-        category
+        category,
       },
       { new: true }
     );
@@ -62,7 +66,7 @@ export const patchAcc = async (req, res) => {
     res.status(200).json({ result: acc, token });
   } catch (err) {
     res.status(500).json({ message: `Something went wrong${err.message}` });
-    console.log(err.message)
+    console.log(err.message);
   }
 };
 
@@ -105,7 +109,10 @@ export const signup = async (req, res) => {
     });
 
     await verificationToken.save();
-    const result = await newAcc.save();
+    await newAcc.save();
+    const result = await Accommodator.findById(newAcc._id).select(
+      "email password owner location"
+    );
 
     mailTransport({ OTP, result });
     res.status(200).json({ result });
@@ -178,4 +185,3 @@ export const login = async (req, res) => {
     res.status(500).json({ message: `Something went wrong ${err} ` });
   }
 };
-

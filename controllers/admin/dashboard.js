@@ -1,6 +1,6 @@
-import Room from ".../../models/room.js";
+import Room from "../../models/room.js";
 import Accommodator from "../../models/accommodator.js";
-import Client from ".../../models/client.js";
+import Client from "../../models/client.js";
 
 export const countData = async (req, res) => {
   try {
