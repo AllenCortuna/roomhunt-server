@@ -64,12 +64,13 @@ export const subcribe = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).send(`No Acc with id: ${id}`);
     }
+    const result = await Accommodator.findById(id).select( "businessName verified owner location email subcribeTil");
+
     const date = new Date();
-    const result = await Accommodator.findById(id).select(
-      "businessName verified owner location email subcribeTil"
-    );
-    result.subcribe = new Date(`${date.getFullYear()}-${date.getMonth() + 1}`);
+    const ndate = new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000);
+    result.subcribeTil = `${ndate.getFullYear()}-${( "0" + (ndate.getMonth() + 1)).slice(-2)}-${("0" + ndate.getDate()).slice(-2)}`;
     await result.save();
+    console.log(result.subcribeTil);
     res.status(200).json(result);
   } catch (err) {
     console.log(err.message);
