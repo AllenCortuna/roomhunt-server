@@ -11,7 +11,7 @@ export const getAccs = async (req, res) => {
       $or: [{ email: que }, { location: que }, { owner: que }],
       verified,
     })
-      .select("businessName verified owner location email")
+      .select("businessName verified owner location email subcribeTil")
       .sort({ _id: "desc" })
       .limit(20);
     res.status(200).json(result);
@@ -23,7 +23,9 @@ export const getAccs = async (req, res) => {
 export const getAcc = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await Accommodator.findById(id).select("businessName verified owner location email");;
+    const result = await Accommodator.findById(id).select(
+      "businessName verified owner location subcribeTil email"
+    );
     res.status(200).json(result);
   } catch (err) {
     console.log(err.message);
@@ -49,7 +51,7 @@ export const verifyAcc = async (req, res) => {
       id,
       { verified },
       { new: true }
-    ); //.select("businessName verified owner location email");
+    ).select("businessName verified owner location email subcribeTil");
     res.status(200).json(result);
   } catch (err) {
     console.log(err.message);
@@ -63,18 +65,11 @@ export const subcribe = async (req, res) => {
       return res.status(404).send(`No Acc with id: ${id}`);
     }
     const date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth() + 2 > 12 ? 1 : date.getMonth() + 1;
-    let year =
-      date.getMonth() + 2 > 12 ? date.getFullYear() + 1 : date.getFullYear();
-
-    const now = new Date(`${year}-${month}-${day}`);
-    const result = await Accommodator.findByIdAndUpdate(
-      id,
-      { subcribeTil: now },
-      { new: true }
-    ).select("businessName verified owner location email");
-    await result.save()
+    const result = await Accommodator.findById(id).select(
+      "businessName verified owner location email subcribeTil"
+    );
+    result.subcribe = new Date(`${date.getFullYear()}-${date.getMonth() + 1}`);
+    await result.save();
     res.status(200).json(result);
   } catch (err) {
     console.log(err.message);
