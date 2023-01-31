@@ -88,6 +88,11 @@ export const signup = async (req, res) => {
       return res.status(409).json({ message: "Account already exist" });
     }
 
+    // free one month subcriptions
+    const date = new Date();
+    const ndate = new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000);
+    const free = `${ndate.getFullYear()}-${("0" + (ndate.getMonth() + 1)).slice( -2)}-${("0" + ndate.getDate()).slice(-2)}`;
+
     const hashedPassword = await bcrypt.hash(password, parseInt(SALT));
     // save new accomodator
     const newAcc = new Accommodator({
@@ -99,6 +104,7 @@ export const signup = async (req, res) => {
       contact,
       category,
       image,
+      subcribeTil: free,
     });
 
     // generate otp
