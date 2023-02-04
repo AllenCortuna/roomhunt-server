@@ -4,14 +4,14 @@ import Client from "../../models/client.js";
 
 export const countData = async (req, res) => {
   try {
-    const verifiedAcc = await Accommodator.countDocuments({ verfied: true });
-    const notVerfiedAcc = await Accommodator.countDocuments({ verfied: false });
-    const verifiedClient = await Client.countDocuments({ verified: true });
+    const verifiedAcc = await Accommodator.countDocuments();
+    const notVerifiedAcc = await Accommodator.countDocuments({ verified: false });
+    const verifiedClient = await Client.countDocuments();
     const notVerifiedClient = await Client.countDocuments({ verified: false });
     res.json({
       result: {
         verifiedAcc,
-        notVerfiedAcc,
+        notVerifiedAcc,
         verifiedClient,
         notVerifiedClient,
       },
