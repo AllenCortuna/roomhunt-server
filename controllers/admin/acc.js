@@ -2,6 +2,7 @@ import Room from "../../models/room.js";
 import Accommodator from "../../models/accommodator.js";
 
 import mongoose from "mongoose";
+import { accVerified } from "../../tools/mail.js";
 
 export const getAccs = async (req, res) => {
   try {
@@ -52,6 +53,7 @@ export const verifyAcc = async (req, res) => {
       { verified },
       { new: true }
     ).select("businessName verified owner location email subcribeTil");
+    accVerified(result.email)
     res.status(200).json(result);
   } catch (err) {
     console.log(err.message);
